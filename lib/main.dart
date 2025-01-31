@@ -5,6 +5,7 @@ import 'package:mono/ui/splash/splash_screen.dart';
 import 'package:mono/utils/colors.dart';
 import 'package:mono/utils/custom_strings.dart';
 
+import 'ui/dashboard/dashboard_screen.dart';
 import 'ui/welcome/welcome_screen.dart';
 
 void main() {
@@ -41,7 +42,9 @@ class MyApp extends StatelessWidget {
         // --------------------------- Login Screen -----------------------------------------
         LoginScreen.routeName: (ctx) => const LoginScreen(),
         // --------------------------- Signup Screen -----------------------------------------
-        SignupScreen.routeName: (ctx) => const SignupScreen()
+        SignupScreen.routeName: (ctx) => const SignupScreen(),
+        // --------------------------- Dashboard Screen -----------------------------------------
+        DashboardBaseScreen.routeName: (ctx) => const DashboardBaseScreen()
 
       },
     );

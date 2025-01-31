@@ -7,6 +7,7 @@ class TextFieldWrapper extends StatelessWidget {
   final TextEditingController? textEditingController;
   final bool readOnly;
   final Color? color;
+  final Color? hintColor;
   final TextInputType? textInputType;
   final bool isValidate;
   final String? Function(String?)? validator;
@@ -24,31 +25,33 @@ class TextFieldWrapper extends StatelessWidget {
   final List<TextInputFormatter>? inputFormatters;
   final TextAlign? textAlign;
   final Color? fillColor;
+  final bool isLabel;
 
   const TextFieldWrapper(
       {Key? key,
-        this.hintText,
-        required this.textEditingController,
-        required this.readOnly,
-        this.color,
-        this.textInputType,
-        required this.isValidate,
-        this.validator,
-        this.maxLength,
-        this.maxLines,
-        this.onTap,
-        this.onChanged,
-        this.suffixIcon,
-        this.textInputAction,
-        this.inputBorder,
-        this.edgeInsetsGeometry,
-        this.focusNode,
-        this.fontSize,
-        this.inputFormatters,
-        this.textAlign,
-        this.fillColor,
-        this.prefixIcon
-      })
+      this.hintText,
+      required this.textEditingController,
+      required this.readOnly,
+      this.color,
+      this.hintColor,
+      this.textInputType,
+      required this.isValidate,
+      this.validator,
+      this.maxLength,
+      this.maxLines,
+      this.onTap,
+      this.onChanged,
+      this.suffixIcon,
+      this.textInputAction,
+      this.inputBorder,
+      this.edgeInsetsGeometry,
+      this.focusNode,
+      this.fontSize,
+      this.inputFormatters,
+      this.textAlign,
+      this.fillColor,
+      this.prefixIcon,
+      required this.isLabel})
       : super(key: key);
 
   @override
@@ -59,23 +62,26 @@ class TextFieldWrapper extends StatelessWidget {
       readOnly: readOnly,
       keyboardType: textInputType,
       inputFormatters: inputFormatters,
-      style: GoogleFonts.roboto(color: color,fontSize: fontSize),
+      style: GoogleFonts.poppins(color: color, fontSize: fontSize),
       validator: isValidate ? validator : null,
       onChanged: onChanged,
       textAlign: textAlign ?? TextAlign.start,
+      textAlignVertical: TextAlignVertical.top,
       decoration: InputDecoration(
-        border: inputBorder,
-        hintText: hintText,
-        fillColor: fillColor ?? Colors.white,
-        filled: true,
-        hintStyle: GoogleFonts.roboto(fontSize: fontSize,color: color),
-        hintMaxLines: 3,
-        suffixIcon: suffixIcon,
-        prefixIcon: prefixIcon,
-        isDense: false, // important line
-        contentPadding: edgeInsetsGeometry,// control your hints text size
-        counterText: ""
-      ),
+          border: inputBorder,
+          hintText: hintText,
+          fillColor: fillColor ?? Colors.white,
+          filled: true,
+          hintStyle: GoogleFonts.poppins(fontSize: fontSize, color: hintColor),
+          hintMaxLines: 3,
+          suffixIcon: suffixIcon,
+          prefixIcon: prefixIcon,
+          isDense: false, // important line
+          contentPadding: edgeInsetsGeometry, // control your hints text size
+          counterText: "",
+          labelText: hintText,
+          alignLabelWithHint: true,
+          labelStyle: GoogleFonts.poppins(fontSize: fontSize, color: color)),
       maxLength: maxLength,
       maxLines: maxLines,
       textInputAction: textInputAction,

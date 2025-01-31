@@ -20,25 +20,15 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: Utils.getDecorationBg(),
-      padding: const EdgeInsets.symmetric(horizontal: 30),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: TextWrapper(
-                textShow: CustomString.hello,
-                fontWeight: FontWeight.bold,
-                fontSize: 50,
-                textColor: CustomColor.themeColor,
-              ),
-            ),
-          ),
-          Column(
+    return Scaffold(
+      body: SafeArea(
+        child: Container(
+          decoration: Utils.getDecorationBg(),
+          padding: const EdgeInsets.symmetric(horizontal: 30),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              const SizedBox(height: 40,),
               Image.asset(Utils.getImagePath(ImageConstant.monoLogo)),
               const SizedBox(height: 40,),
               GestureDetector(
@@ -73,7 +63,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               const SizedBox(height: 150,),
             ],
           ),
-        ],
+        ),
       ),
     );
   }

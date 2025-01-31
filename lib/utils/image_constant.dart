@@ -7,4 +7,14 @@ class ImageConstant{
   static String backgroundImage = "backgroundImage.png"; // bg image
   static String monoLogo = "monoLogo.png"; // monoLogo
 
+  // ------------------------------- Dashboard --------------------------------------------
+  static String orderIcon = "orderIcon.png";
+  static String myCartIcon = "myCartIcon.png";
+  static String priceListIcon = "priceListIcon.png";
+  static String favoriteIcon = "favoriteIcon.png";
+  static String productImage = "productImage.png";
+  static String drawerPersonIcon = "drawerPersonIcon.png";
+  static String filterIcon = "filterIcon.png";
+  static String cartIcon = "cartIcon.png";
+
 }
