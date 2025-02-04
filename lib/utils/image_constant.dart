@@ -16,5 +16,8 @@ class ImageConstant{
   static String drawerPersonIcon = "drawerPersonIcon.png";
   static String filterIcon = "filterIcon.png";
   static String cartIcon = "cartIcon.png";
-
+  static String productDetail = "productDetailImg.png";
+  static String cartIconProductDetail = "cartIconProductDetail.png";
+  static String favoriteIconProductDetail = "favoriteIconProductDetail.png";
+  static String shareIconProductDetail = "shareIconProductDetail.png";
 }

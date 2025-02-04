@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:mono/ui/productDetail/product_detail.dart';
 import 'package:mono/utils/colors.dart';
 import 'package:mono/utils/custom_strings.dart';
 import 'package:mono/widgets/text_widget.dart';
@@ -14,6 +16,26 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+  var segments = [
+    "Segment 1",
+    "Segment 2",
+  ];
+
+  var division = [
+    "Division 1",
+    "Division 2",
+  ];
+
+  var composition = [
+    "Composition 1",
+    "Composition 2",
+  ];
+  String currentSelectedSegment = "Segment 1";
+  String currentSelectedDivision = "Division 1";
+  String currentSelectedComposition = "Composition 1";
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -109,6 +131,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   width: 10,
                 ),
                 InkWell(
+                  onTap: () {
+                    showBottomSheetFilter(context);
+                  },
                   child:
                       Image.asset(Utils.getImagePath(ImageConstant.filterIcon)),
                 )
@@ -121,36 +146,58 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: GridView.builder(
               itemCount: 10,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,childAspectRatio: 0.9,crossAxisSpacing: 10),
+                  crossAxisCount: 2,
+                  childAspectRatio: 0.9,
+                  crossAxisSpacing: 10),
               itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                  child: Column(
-                    children: [
-                      Card(
-                        color: Colors.white,
-                        elevation: 5,
-                        shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(20))),
-                        child: Image.asset(
-                            Utils.getImagePath(ImageConstant.productImage)),
-                      ),
-                      const SizedBox(height: 10,),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              TextWrapper(textShow: "Ketotek - DT",fontSize: 16,fontWeight: FontWeight.bold,),
-                              SizedBox(height: 5,),
-                              TextWrapper(textShow: "₹ 280.00",fontSize: 14,fontWeight: FontWeight.bold,textColor: CustomColor.greenColor,),
-                            ],
-                          ),
-                          Image.asset(Utils.getImagePath(ImageConstant.cartIcon))
-                        ],
-                      ),
-                    ],
+                return InkWell(
+                  onTap: (){
+                    Navigator.pushNamed(context, ProductDetail.routeName);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                    child: Column(
+                      children: [
+                        Card(
+                          color: Colors.white,
+                          elevation: 5,
+                          shape: const RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20))),
+                          child: Image.asset(
+                              Utils.getImagePath(ImageConstant.productImage)),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                TextWrapper(
+                                  textShow: "Ketotek - DT",
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                TextWrapper(
+                                  textShow: "₹ 280.00",
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  textColor: CustomColor.greenColor,
+                                ),
+                              ],
+                            ),
+                            Image.asset(
+                                Utils.getImagePath(ImageConstant.cartIcon))
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },
@@ -211,6 +258,156 @@ class _HomeScreenState extends State<HomeScreen> {
         fontWeight: FontWeight.w500,
         fontSize: fontSize,
       ),
+    );
+  }
+
+  showBottomSheetFilter(BuildContext context) {
+    showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: Colors.white,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(25), topRight: Radius.circular(25)),
+      ),
+      builder: (BuildContext context) {
+        return Wrap(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TextWrapper(
+                        textShow: CustomString.filters,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      TextWrapper(
+                        textShow: CustomString.clear,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        textColor: CustomColor.themeColor,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20,),
+                  InputDecorator(
+                    decoration: InputDecoration(
+                      labelStyle:  GoogleFonts.poppins(color: CustomColor.themeColor, fontSize: 16.0),
+                      errorStyle: GoogleFonts.poppins(color: CustomColor.themeColor, fontSize: 16.0),
+                      hintText: 'Please select State',
+                      border:OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: const BorderSide(color: CustomColor.prefixIconColor,)),),
+                    isEmpty: currentSelectedSegment == '',
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        dropdownColor: CustomColor.white,
+                        value: currentSelectedSegment,
+                        isDense: true,
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            currentSelectedSegment = newValue!;
+                            // state.didChange(newValue);
+                          });
+                        },
+                        items: segments.map((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20,),
+                  InputDecorator(
+                    decoration: InputDecoration(
+                      labelStyle:  GoogleFonts.poppins(color: CustomColor.themeColor, fontSize: 16.0),
+                      errorStyle: GoogleFonts.poppins(color: CustomColor.themeColor, fontSize: 16.0),
+                      hintText: 'Please select State',
+                      border:OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: const BorderSide(color: CustomColor.prefixIconColor,)),),
+                    isEmpty: currentSelectedDivision == '',
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        dropdownColor: CustomColor.white,
+                        value: currentSelectedDivision,
+                        isDense: true,
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            currentSelectedDivision = newValue!;
+                          });
+                        },
+                        items: division.map((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20,),
+                  InputDecorator(
+                    decoration: InputDecoration(
+                      labelStyle:  GoogleFonts.poppins(color: CustomColor.themeColor, fontSize: 16.0),
+                      errorStyle: GoogleFonts.poppins(color: CustomColor.themeColor, fontSize: 16.0),
+                      hintText: 'Please select State',
+                      border:OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: const BorderSide(color: CustomColor.prefixIconColor,)),),
+                    isEmpty: currentSelectedComposition == '',
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        dropdownColor: CustomColor.white,
+                        value: currentSelectedComposition,
+                        isDense: true,
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            currentSelectedComposition = newValue!;
+                          });
+                        },
+                        items: composition.map((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 30,),
+                  InkWell(
+                    onTap: () {},
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                          color: CustomColor.themeColor,
+                          borderRadius: BorderRadius.circular(50)),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 12.0),
+                        child: Center(
+                            child: TextWrapper(
+                              textShow: CustomString.search,
+                              height: 0,
+                              textColor: CustomColor.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            )),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

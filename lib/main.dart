@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mono/ui/login/login_screen.dart';
+import 'package:mono/ui/productDetail/product_detail.dart';
 import 'package:mono/ui/signup/signup_screen.dart';
 import 'package:mono/ui/splash/splash_screen.dart';
 import 'package:mono/utils/colors.dart';
@@ -44,8 +45,9 @@ class MyApp extends StatelessWidget {
         // --------------------------- Signup Screen -----------------------------------------
         SignupScreen.routeName: (ctx) => const SignupScreen(),
         // --------------------------- Dashboard Screen -----------------------------------------
-        DashboardBaseScreen.routeName: (ctx) => const DashboardBaseScreen()
-
+        DashboardBaseScreen.routeName: (ctx) => const DashboardBaseScreen(),
+        // --------------------------- ProductDetail Screen -----------------------------------------
+        ProductDetail.routeName: (ctx) => const ProductDetail()
       },
     );
   }

@@ -65,4 +65,17 @@ class CustomString{
   static String generatePDF = "Generate PDF";
   static String generatePDFShowBelow = "Generated PDF Shows Bellow";
 
+  // Filter
+  static String filters = "Filters";
+  static String clear = "Clear";
+  static String search = "Search";
+
+  // product Detail
+  static String productDetail = "Product Details";
+  static String name = "Name";
+  static String composition = "Composition";
+  static String category = "Category";
+  static String division = "Division";
+  static String segment = "Segment";
+  static String lbc = "LBC / Visualised";
 }
