@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:retrofit/error_logger.dart';
 import 'package:retrofit/http.dart';
 
+import '../model/product/product view/product_view_response.dart';
 import '../model/product/product_listing/product_listing_response.dart';
 import 'my_api_utils.dart';
 
@@ -15,4 +16,7 @@ abstract class MyApiClient {
   @GET("products")
   Future<ProductListingResponse> productListing();
 
+  //product view
+  @POST("product/view")
+  Future<ProductViewResponse> productView(@Query("id") int id);
 }

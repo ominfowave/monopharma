@@ -50,4 +50,5 @@ class Utils{
   static showToast(String toastMsg) {
     Fluttertoast.showToast(msg: toastMsg);
   }
+
 }
