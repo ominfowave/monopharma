@@ -28,7 +28,7 @@ class _DashboardBaseScreenState extends State<DashboardBaseScreen> {
   Widget build(BuildContext context) {
     if(isFirst) {
       screen = [
-        const HomeScreen(),
+         const HomeScreen(),
         const OrderScreen(),
         const CartScreen(),
         const PriceListScreen(),

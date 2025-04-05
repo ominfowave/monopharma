@@ -5,7 +5,11 @@ import 'package:mono/utils/colors.dart';
 import 'package:mono/utils/custom_strings.dart';
 import 'package:mono/widgets/text_widget.dart';
 
+import '../../Api/api_repo.dart';
+import '../../Api/my_api_utils.dart';
+import '../../model/product/product_listing/product_listing_response.dart';
 import '../../utils/image_constant.dart';
+import '../../utils/shared_preference.dart';
 import '../../utils/utils.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -16,6 +20,15 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  bool isLoading = false;
+  SharedPref prefs = SharedPref();
+  ProductListingResponse productListingResponse = ProductListingResponse();
+
+  @override
+  void initState() {
+    super.initState();
+    fetchProductListing();
+  }
 
   var segments = [
     "Segment 1",
@@ -143,8 +156,10 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 10,
             ),
             Expanded(
-                child: GridView.builder(
-              itemCount: 10,
+                child: isLoading? Center(
+                  child: CircularProgressIndicator(),
+                ): GridView.builder(
+              itemCount: productListingResponse.data!.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   childAspectRatio: 0.9,
@@ -173,27 +188,28 @@ class _HomeScreenState extends State<HomeScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Column(
+                            Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 TextWrapper(
-                                  textShow: "Ketotek - DT",
-                                  fontSize: 16,
+                                  textShow:productListingResponse.data![0].productName,
+                                  fontSize: 13,
                                   fontWeight: FontWeight.bold,
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 5,
                                 ),
-                                TextWrapper(
-                                  textShow: "₹ 280.00",
+                                 TextWrapper(
+                                  textShow: "₹ ${productListingResponse.data![0].productPrice}",
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
                                   textColor: CustomColor.greenColor,
                                 ),
                               ],
                             ),
-                            Image.asset(
-                                Utils.getImagePath(ImageConstant.cartIcon))
+                            Image.network(
+                              height: 30,
+                               productListingResponse.data![0].productImage!)
                           ],
                         ),
                       ],
@@ -409,5 +425,36 @@ class _HomeScreenState extends State<HomeScreen> {
         );
       },
     );
+  }
+
+  //product listing api call
+  Future<void> fetchProductListing() async {
+    setState(() {
+      isLoading = true;
+    });
+    try {
+      String? token = await prefs.getToken();
+      ApiRepo(token,null, baseUrl: MyApiUtils.baseUrl).productListing(
+        context,
+            (error) {
+          setState(() {
+            isLoading = false;
+          });
+          print('API Error: $error');
+          Utils.showToast("Server Error: $error");
+        },
+            (response) {
+          setState(() {
+            productListingResponse = response;
+            isLoading = false;
+          });
+        },
+      );
+    } catch (error) {
+      setState(() {
+        isLoading = false;
+      });
+      print("Error fetching product list: $error");
+    }
   }
 }

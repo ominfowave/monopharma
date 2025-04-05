@@ -39,83 +39,153 @@ class _ProductDetailState extends State<ProductDetail> {
                 padding: const EdgeInsets.all(10.0),
                 child: Card(
                   shape: const RoundedRectangleBorder(
-                      borderRadius:
-                      BorderRadius.all(Radius.circular(20))),
+                      borderRadius: BorderRadius.all(Radius.circular(20))),
                   elevation: 10,
-                  child: Image.asset(Utils.getImagePath(ImageConstant.productDetail)),
+                  child: Image.asset(
+                      Utils.getImagePath(ImageConstant.productDetail)),
                 ),
               ),
-              const SizedBox(height: 20,),
+              const SizedBox(
+                height: 20,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      TextWrapper(textShow: CustomString.name,textColor: CustomColor.themeColor,fontSize: 14,),
+                      TextWrapper(
+                        textShow: CustomString.name,
+                        textColor: CustomColor.themeColor,
+                        fontSize: 14,
+                      ),
                       const SizedBox(height: 5),
-                      const TextWrapper(textShow: "Ketotek - DT",fontWeight: FontWeight.bold,fontSize: 18,),
+                      const TextWrapper(
+                        textShow: "Ketotek - DT",
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
                     ],
                   ),
                   Row(
                     children: [
-                      Image.asset(Utils.getImagePath(ImageConstant.cartIconProductDetail)),
-                      const SizedBox(width: 20,),
-                      Image.asset(Utils.getImagePath(ImageConstant.favoriteIconProductDetail)),
-                      const SizedBox(width: 20,),
-                      Image.asset(Utils.getImagePath(ImageConstant.shareIconProductDetail)),
+                      Image.asset(Utils.getImagePath(
+                          ImageConstant.cartIconProductDetail)),
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      Image.asset(Utils.getImagePath(
+                          ImageConstant.favoriteIconProductDetail)),
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      Image.asset(Utils.getImagePath(
+                          ImageConstant.shareIconProductDetail)),
                     ],
                   ),
                 ],
               ),
-              const SizedBox(height: 20,),
-              TextWrapper(textShow: CustomString.composition,textColor: CustomColor.themeColor,fontSize: 14,),
+              const SizedBox(
+                height: 20,
+              ),
+              TextWrapper(
+                textShow: CustomString.composition,
+                textColor: CustomColor.themeColor,
+                fontSize: 14,
+              ),
               const SizedBox(height: 5),
-              const TextWrapper(textShow: "White Soft Paraffin 13.2 % w/w + Liquid Paraffin",fontWeight: FontWeight.w500,fontSize: 18,),
+              const TextWrapper(
+                textShow: "White Soft Paraffin 13.2 % w/w + Liquid Paraffin",
+                fontWeight: FontWeight.w500,
+                fontSize: 18,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 20,),
-                      TextWrapper(textShow: CustomString.category,textColor: CustomColor.themeColor,fontSize: 14,),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      TextWrapper(
+                        textShow: CustomString.category,
+                        textColor: CustomColor.themeColor,
+                        fontSize: 14,
+                      ),
                       const SizedBox(height: 5),
-                      const TextWrapper(textShow: "Anti-biotic",fontWeight: FontWeight.w500,fontSize: 18,),
+                      const TextWrapper(
+                        textShow: "Anti-biotic",
+                        fontWeight: FontWeight.w500,
+                        fontSize: 18,
+                      ),
                     ],
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 20,),
-                      TextWrapper(textShow: CustomString.division,textColor: CustomColor.themeColor,fontSize: 14,),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      TextWrapper(
+                        textShow: CustomString.division,
+                        textColor: CustomColor.themeColor,
+                        fontSize: 14,
+                      ),
                       const SizedBox(height: 5),
-                      const TextWrapper(textShow: "Nemi Pharmaceuticals",fontWeight: FontWeight.w500,fontSize: 18,),
+                      const TextWrapper(
+                        textShow: "Nemi Pharmaceuticals",
+                        fontWeight: FontWeight.w500,
+                        fontSize: 18,
+                      ),
                     ],
                   )
                 ],
               ),
-              const SizedBox(height: 20,),
-              TextWrapper(textShow: CustomString.segment,textColor: CustomColor.themeColor,fontSize: 14,),
+              const SizedBox(
+                height: 20,
+              ),
+              TextWrapper(
+                textShow: CustomString.segment,
+                textColor: CustomColor.themeColor,
+                fontSize: 14,
+              ),
               const SizedBox(height: 5),
-              const TextWrapper(textShow: "Demaroz, Skin Care Soap / Lotion & Wash",fontWeight: FontWeight.w500,fontSize: 18,),
-              const SizedBox(height: 20,),
+              const TextWrapper(
+                textShow: "Demaroz, Skin Care Soap / Lotion & Wash",
+                fontWeight: FontWeight.w500,
+                fontSize: 18,
+              ),
+              const SizedBox(
+                height: 20,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Card(
                     color: Colors.white,
                     shape: const RoundedRectangleBorder(
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(50))),
+                        borderRadius: BorderRadius.all(Radius.circular(50))),
                     elevation: 10,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 50.0,vertical: 20),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 50.0, vertical: 20),
                       child: Column(
                         children: [
-                          const TextWrapper(textShow: "M.R.P",fontWeight: FontWeight.w500,fontSize: 18,),
-                          const SizedBox(height: 3,),
-                          const TextWrapper(textShow: "250.00",fontWeight: FontWeight.bold,fontSize: 18,textColor: CustomColor.themeColor,),
+                          const TextWrapper(
+                            textShow: "M.R.P",
+                            fontWeight: FontWeight.w500,
+                            fontSize: 18,
+                          ),
+                          const SizedBox(
+                            height: 3,
+                          ),
+                          const TextWrapper(
+                            textShow: "250.00",
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            textColor: CustomColor.themeColor,
+                          ),
                         ],
                       ),
                     ),
@@ -123,23 +193,36 @@ class _ProductDetailState extends State<ProductDetail> {
                   Card(
                     color: Colors.white,
                     shape: const RoundedRectangleBorder(
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(50))),
+                        borderRadius: BorderRadius.all(Radius.circular(50))),
                     elevation: 10,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 50.0,vertical: 20),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 50.0, vertical: 20),
                       child: Column(
                         children: [
-                          const TextWrapper(textShow: "Pack",fontWeight: FontWeight.w500,fontSize: 18,),
-                          const SizedBox(height: 3,),
-                          const TextWrapper(textShow: "1*75gm",fontWeight: FontWeight.bold,fontSize: 18,textColor: CustomColor.themeColor,),
+                          const TextWrapper(
+                            textShow: "Pack",
+                            fontWeight: FontWeight.w500,
+                            fontSize: 18,
+                          ),
+                          const SizedBox(
+                            height: 3,
+                          ),
+                          const TextWrapper(
+                            textShow: "1*75gm",
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            textColor: CustomColor.themeColor,
+                          ),
                         ],
                       ),
                     ),
                   )
                 ],
               ),
-              const SizedBox(height: 20,),
+              const SizedBox(
+                height: 20,
+              ),
               GestureDetector(
                 onTap: () {},
                 child: Container(
@@ -151,12 +234,12 @@ class _ProductDetailState extends State<ProductDetail> {
                     padding: const EdgeInsets.symmetric(vertical: 12.0),
                     child: Center(
                         child: TextWrapper(
-                          textShow: CustomString.lbc,
-                          height: 0,
-                          textColor: CustomColor.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
-                        )),
+                      textShow: CustomString.lbc,
+                      height: 0,
+                      textColor: CustomColor.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    )),
                   ),
                 ),
               ),

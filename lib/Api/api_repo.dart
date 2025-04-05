@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 
+import '../model/divisions/divisions_listing/divisions_listing_response.dart';
 import '../model/product/product_listing/product_listing_response.dart';
+import '../model/segments/segments_listing/segments_listing_response.dart';
 import '../utils/utils.dart';
 import '../model/product/product view/product_view_response.dart';
 import '../utils/utils.dart';
@@ -64,6 +66,35 @@ class ApiRepo {
       onError("Please check your internet connection and try again.");
     }
   }
+  // divisions listing
+  divisionsListing(BuildContext context, Function(String) onError,
+      Function(dynamic) onSuccess) async {
+    // check internet
+    if (await Utils.isInternetConnected()) {
+      try {
+        DivisionsListingResponse divisionsListingResponse = await apiClient.divisionsListing();
+        onSuccess(divisionsListingResponse);
+      } on DioException catch (e) {
+        Utils.getErrorApi(e, onError, context);
+      }
+    } else {
+      onError("Please check your internet connection and try again.");
+    }
+  }
 
-
+  // segments listing
+  segmentsListing(BuildContext context, Function(String) onError,
+      Function(dynamic) onSuccess) async {
+    // check internet
+    if (await Utils.isInternetConnected()) {
+      try {
+        SegmentsListingResponse segmentsListingResponse = await apiClient.segmentsListing();
+        onSuccess(segmentsListingResponse);
+      } on DioException catch (e) {
+        Utils.getErrorApi(e, onError, context);
+      }
+    } else {
+      onError("Please check your internet connection and try again.");
+    }
+  }
 }
