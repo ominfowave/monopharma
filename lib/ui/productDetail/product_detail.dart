@@ -5,7 +5,14 @@ import 'package:mono/utils/image_constant.dart';
 import 'package:mono/utils/utils.dart';
 import 'package:mono/widgets/text_widget.dart';
 
+import '../../Api/api_repo.dart';
+import '../../Api/my_api_utils.dart';
+import '../../model/product/product view/product_view_response.dart';
+import '../../utils/shared_preference.dart';
+
 class ProductDetail extends StatefulWidget {
+
+
   const ProductDetail({super.key});
 
   static String routeName = '/product_screen';
@@ -15,6 +22,20 @@ class ProductDetail extends StatefulWidget {
 }
 
 class _ProductDetailState extends State<ProductDetail> {
+  bool isLoading = false;
+  ProductViewResponse productViewResponse = ProductViewResponse();
+  SharedPref prefs = SharedPref();
+  late int id;
+
+
+  @override
+  void initState() {
+    super.initState();
+    fetchProductView(1);
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +49,9 @@ class _ProductDetailState extends State<ProductDetail> {
           fontSize: 25,
         ),
       ),
-      body: Container(
+      body: isLoading ? const Center(
+        child: CircularProgressIndicator(),
+      ): Container(
         decoration: Utils.getDecorationBg(),
         padding: const EdgeInsets.all(20),
         child: SingleChildScrollView(
@@ -41,9 +64,14 @@ class _ProductDetailState extends State<ProductDetail> {
                   shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(20))),
                   elevation: 10,
-                  child: Image.asset(
-                      Utils.getImagePath(ImageConstant.productDetail)),
-                ),
+                  child: Image.network(
+                      productViewResponse.data![0].productImage!,
+                    width: 280.0,
+                    height: 250.0,
+                    fit: BoxFit.cover,
+
+
+                  )),
               ),
               const SizedBox(
                 height: 20,
@@ -55,15 +83,16 @@ class _ProductDetailState extends State<ProductDetail> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       TextWrapper(
-                        textShow: CustomString.name,
+                        textShow:CustomString.name,
                         textColor: CustomColor.themeColor,
                         fontSize: 14,
                       ),
+
                       const SizedBox(height: 5),
-                      const TextWrapper(
-                        textShow: "Ketotek - DT",
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
+                      TextWrapper(
+                        textShow: productViewResponse.data![0].productName ?? '',
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16,
                       ),
                     ],
                   ),
@@ -94,10 +123,10 @@ class _ProductDetailState extends State<ProductDetail> {
                 fontSize: 14,
               ),
               const SizedBox(height: 5),
-              const TextWrapper(
-                textShow: "White Soft Paraffin 13.2 % w/w + Liquid Paraffin",
+              TextWrapper(
+                textShow: productViewResponse.data![0].compositionName ?? '',
                 fontWeight: FontWeight.w500,
-                fontSize: 18,
+                fontSize: 16,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -114,10 +143,10 @@ class _ProductDetailState extends State<ProductDetail> {
                         fontSize: 14,
                       ),
                       const SizedBox(height: 5),
-                      const TextWrapper(
-                        textShow: "Anti-biotic",
+                      TextWrapper(
+                        textShow: productViewResponse.data![0].categoryName ?? '',
                         fontWeight: FontWeight.w500,
-                        fontSize: 18,
+                        fontSize: 16,
                       ),
                     ],
                   ),
@@ -133,10 +162,10 @@ class _ProductDetailState extends State<ProductDetail> {
                         fontSize: 14,
                       ),
                       const SizedBox(height: 5),
-                      const TextWrapper(
-                        textShow: "Nemi Pharmaceuticals",
+                       TextWrapper(
+                        textShow: productViewResponse.data![0].divisionName ?? '',
                         fontWeight: FontWeight.w500,
-                        fontSize: 18,
+                        fontSize: 16,
                       ),
                     ],
                   )
@@ -151,10 +180,10 @@ class _ProductDetailState extends State<ProductDetail> {
                 fontSize: 14,
               ),
               const SizedBox(height: 5),
-              const TextWrapper(
-                textShow: "Demaroz, Skin Care Soap / Lotion & Wash",
+               TextWrapper(
+                textShow: productViewResponse.data![0].segmentName ?? '',
                 fontWeight: FontWeight.w500,
-                fontSize: 18,
+                fontSize: 16,
               ),
               const SizedBox(
                 height: 20,
@@ -169,7 +198,7 @@ class _ProductDetailState extends State<ProductDetail> {
                     elevation: 10,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 50.0, vertical: 20),
+                          horizontal: 40.0, vertical: 20),
                       child: Column(
                         children: [
                           const TextWrapper(
@@ -180,8 +209,8 @@ class _ProductDetailState extends State<ProductDetail> {
                           const SizedBox(
                             height: 3,
                           ),
-                          const TextWrapper(
-                            textShow: "250.00",
+                           TextWrapper(
+                            textShow: productViewResponse.data![0].productPrice ?? '',
                             fontWeight: FontWeight.bold,
                             fontSize: 18,
                             textColor: CustomColor.themeColor,
@@ -197,7 +226,7 @@ class _ProductDetailState extends State<ProductDetail> {
                     elevation: 10,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 50.0, vertical: 20),
+                          horizontal: 40.0, vertical: 20),
                       child: Column(
                         children: [
                           const TextWrapper(
@@ -208,8 +237,8 @@ class _ProductDetailState extends State<ProductDetail> {
                           const SizedBox(
                             height: 3,
                           ),
-                          const TextWrapper(
-                            textShow: "1*75gm",
+                           TextWrapper(
+                            textShow:  productViewResponse.data![0].productPack ?? '',
                             fontWeight: FontWeight.bold,
                             fontSize: 18,
                             textColor: CustomColor.themeColor,
@@ -243,10 +272,36 @@ class _ProductDetailState extends State<ProductDetail> {
                   ),
                 ),
               ),
-            ],
+              ],
           ),
         ),
       ),
     );
+  }
+
+  // product view api call
+  Future<void> fetchProductView(int id ) async {
+    setState(() {
+      isLoading = true;
+    });
+    try {
+      String? token = await prefs.getToken();
+      ApiRepo(token, null, baseUrl: MyApiUtils.baseUrl).productView(
+        context,
+        id,
+        (error) {
+          print('API Error: $error');
+          Utils.showToast("Server Error: $error");
+        },
+        (response) {
+          setState(() {
+            productViewResponse = response;
+            isLoading = false;
+          });
+        },
+      );
+    } catch (error) {
+      print("Error fetching delete product: $error");
+    }
   }
 }
