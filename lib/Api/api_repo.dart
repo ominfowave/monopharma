@@ -1,5 +1,8 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 
+import '../model/product/product_listing/product_listing_response.dart';
+import '../utils/utils.dart';
 import 'my_api_client.dart';
 import 'my_api_utils.dart';
 
@@ -25,5 +28,19 @@ class ApiRepo {
     Dio dio = Dio(options);
     apiClient = MyApiClient(dio, baseUrl: baseUrl);
   }
-
+ // product listing
+  productListing(BuildContext context, Function(String) onError,
+      Function(dynamic) onSuccess) async {
+    // check internet
+    if (await Utils.isInternetConnected()) {
+      try {
+        ProductListingResponse productListingResponse = await apiClient.productListing();
+        onSuccess(productListingResponse);
+      } on DioException catch (e) {
+        Utils.getErrorApi(e, onError, context);
+      }
+    } else {
+      onError("Please check your internet connection and try again.");
+    }
+  }
 }

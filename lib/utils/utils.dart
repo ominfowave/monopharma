@@ -1,4 +1,7 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 import 'image_constant.dart';
 
@@ -22,5 +25,29 @@ class Utils{
           ),
           fit: BoxFit.cover,
         ));
+  }
+  // check internet is connected or not
+  static Future<bool> isInternetConnected() async {
+    if (await InternetConnectionChecker().hasConnection) {
+      // Mobile data detected & internet connection confirmed.
+      return true;
+    } else {
+      // Mobile data detected but no internet connection found.
+      return false;
+    }
+  }
+  static getErrorApi(DioException e, Function(String p1) onError, BuildContext context){
+    if(e.type == DioExceptionType.connectionTimeout || e.type == DioExceptionType.receiveTimeout || e.type == DioExceptionType.unknown){
+      onError("Connection timeout. Please check your internet connection and try again.");
+    } else if (e.response == null){
+      onError("Something went wrong. Please try again later.");
+    }else if(e.response!.statusCode == 400){
+      onError(e.response!.data.toString());
+    }else {
+      onError("Something went wrong. Please try again later.");
+    }
+  }
+  static showToast(String toastMsg) {
+    Fluttertoast.showToast(msg: toastMsg);
   }
 }
