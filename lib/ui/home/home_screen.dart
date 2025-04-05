@@ -156,18 +156,18 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 10,
             ),
             Expanded(
-                child: isLoading? Center(
+                child: isLoading? const Center(
                   child: CircularProgressIndicator(),
                 ): GridView.builder(
               itemCount: productListingResponse.data!.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  childAspectRatio: 0.9,
+                  childAspectRatio: 0.87,
                   crossAxisSpacing: 10),
               itemBuilder: (context, index) {
                 return InkWell(
                   onTap: (){
-                    Navigator.pushNamed(context, ProductDetail.routeName);
+                    Navigator.pushNamed(context, ProductDetail.routeName,arguments: {"productId" : productListingResponse.data![index].id!});
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15.0),
@@ -179,8 +179,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           shape: const RoundedRectangleBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(20))),
-                          child: Image.asset(
-                              Utils.getImagePath(ImageConstant.productImage)),
+                          child: Image.network(productListingResponse.data![index].productImage!),
                         ),
                         const SizedBox(
                           height: 10,
@@ -191,25 +190,29 @@ class _HomeScreenState extends State<HomeScreen> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                TextWrapper(
-                                  textShow:productListingResponse.data![0].productName,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.bold,
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width * 0.3,
+                                  child: TextWrapper(
+                                    textShow:productListingResponse.data![index].productName,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.bold,
+                                    maxLine: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                                 ),
                                 const SizedBox(
                                   height: 5,
                                 ),
                                  TextWrapper(
-                                  textShow: "₹ ${productListingResponse.data![0].productPrice}",
+                                  textShow: "₹ ${productListingResponse.data![index].productPrice}",
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
                                   textColor: CustomColor.greenColor,
                                 ),
                               ],
                             ),
-                            Image.network(
-                              height: 30,
-                               productListingResponse.data![0].productImage!)
+                            Image.asset(
+                                Utils.getImagePath(ImageConstant.cartIcon))
                           ],
                         ),
                       ],

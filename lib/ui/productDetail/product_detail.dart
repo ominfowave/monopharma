@@ -11,8 +11,6 @@ import '../../model/product/product view/product_view_response.dart';
 import '../../utils/shared_preference.dart';
 
 class ProductDetail extends StatefulWidget {
-
-
   const ProductDetail({super.key});
 
   static String routeName = '/product_screen';
@@ -25,19 +23,15 @@ class _ProductDetailState extends State<ProductDetail> {
   bool isLoading = false;
   ProductViewResponse productViewResponse = ProductViewResponse();
   SharedPref prefs = SharedPref();
-  late int id;
-
-
-  @override
-  void initState() {
-    super.initState();
-    fetchProductView(1);
-  }
-
-
+  bool isFirst = true;
 
   @override
   Widget build(BuildContext context) {
+    if(isFirst) {
+      final args = ModalRoute.of(context)!.settings.arguments as Map;
+      fetchProductView(args["productId"]);
+      isFirst = false;
+    }
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -210,7 +204,7 @@ class _ProductDetailState extends State<ProductDetail> {
                             height: 3,
                           ),
                            TextWrapper(
-                            textShow: productViewResponse.data![0].productPrice ?? '',
+                            textShow: "₹ ${productViewResponse.data![0].productPrice ?? ''}",
                             fontWeight: FontWeight.bold,
                             fontSize: 18,
                             textColor: CustomColor.themeColor,

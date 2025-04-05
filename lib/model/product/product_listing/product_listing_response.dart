@@ -20,6 +20,8 @@ class ProductListingResponse {
 
 @JsonSerializable()
 class Data {
+  final int? id;
+
   @JsonKey(name: 'product_name')
   final String? productName;
 
@@ -29,7 +31,7 @@ class Data {
   @JsonKey(name: 'product_price')
   final String? productPrice;
 
-  Data({this.productName, this.productImage, this.productPrice});
+  Data({this.id,this.productName, this.productImage, this.productPrice});
 
   factory Data.fromJson(Map<String, dynamic> json) => _$DataFromJson(json);
 
