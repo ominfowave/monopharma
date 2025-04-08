@@ -6,6 +6,10 @@ import 'package:mono/utils/custom_strings.dart';
 import 'package:mono/utils/utils.dart';
 import 'package:mono/widgets/text_widget.dart';
 
+import '../../Api/api_repo.dart';
+import '../../Api/my_api_utils.dart';
+import '../../model/login/login_response.dart';
+import '../../utils/shared_preference.dart';
 import '../signup/signup_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -28,6 +32,16 @@ class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   bool passwordVisible = false;
+  LoginResponse loginResponse = LoginResponse();
+  SharedPref prefs = SharedPref();
+  bool isLoading = false;
+
+  @override
+  void dispose() {
+    userNameController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +79,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   TextFormField(
                     controller: userNameController,
                     readOnly: false,
-
                     decoration: InputDecoration(
                         hintText: CustomString.userNameHint,
                         prefixIcon: const Icon(
@@ -110,7 +123,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         suffixIcon: IconButton(
                           icon: Icon(
-                            passwordVisible ? Icons.visibility
+                            passwordVisible
+                                ? Icons.visibility
                                 : Icons.visibility_off,
                             color: CustomColor.themeColor,
                           ),
@@ -150,11 +164,18 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      // Redirect to Dashboard
-                      if (_formKey.currentState?.validate() ?? false) {
-                        // put login code
+                      if (userNameController.text.isEmpty) {
+                        Utils.showToast('Enter a Username');
+                        return;
                       }
-                      Navigator.pushNamed(context, DashboardBaseScreen.routeName);
+                      if (passwordController.text.isEmpty) {
+                        Utils.showToast('Enter a Password');
+                        return;
+                      }
+
+                      if (_formKey.currentState?.validate() ?? false) {}
+                      Navigator.pushNamed(
+                          context, DashboardBaseScreen.routeName);
                     },
                     child: Container(
                       width: MediaQuery.of(context).size.width,
@@ -164,13 +185,23 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 12.0),
                         child: Center(
-                            child: TextWrapper(
-                          textShow: CustomString.loginButton,
-                          height: 0,
-                          textColor: CustomColor.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
-                        )),
+                          child: isLoading
+                              ? const SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                              : TextWrapper(
+                                  textShow: CustomString.loginButton,
+                                  height: 0,
+                                  textColor: CustomColor.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                ),
+                        ),
                       ),
                     ),
                   ),
@@ -193,7 +224,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        // Redirect to signup screen
                         Navigator.pushNamed(context, SignupScreen.routeName);
                       },
                       child: TextWrapper(
@@ -213,6 +243,37 @@ class _LoginScreenState extends State<LoginScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  //login api call
+  Future<void> login(fullName, password, cPassword) async {
+    setState(() {
+      isLoading = true;
+    });
+    // Call the API
+    await ApiRepo("", null, baseUrl: MyApiUtils.baseUrl).login(
+      context,
+      fullName,
+      password,
+      cPassword,
+      (error) {
+        setState(() {
+          isLoading = false;
+        });
+        print('API Error:$error');
+        Utils.showToast("Server Error: $error");
+      },
+      (response) {
+        setState(() {
+          loginResponse = response;
+          isLoading = false;
+        });
+
+        if (response is LoginResponse) {
+          Utils.showToast(response.message ?? "login successfully");
+        }
+      },
     );
   }
 }

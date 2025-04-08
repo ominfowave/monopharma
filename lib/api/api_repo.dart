@@ -2,7 +2,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../model/divisions/divisions_listing/divisions_listing_response.dart';
+import '../model/login/login_response.dart';
 import '../model/product/product_listing/product_listing_response.dart';
+import '../model/register/register_response.dart';
 import '../model/segments/segments_listing/segments_listing_response.dart';
 import '../utils/utils.dart';
 import '../model/product/product view/product_view_response.dart';
@@ -90,6 +92,66 @@ class ApiRepo {
       try {
         SegmentsListingResponse segmentsListingResponse = await apiClient.segmentsListing();
         onSuccess(segmentsListingResponse);
+      } on DioException catch (e) {
+        Utils.getErrorApi(e, onError, context);
+      }
+    } else {
+      onError("Please check your internet connection and try again.");
+    }
+  }
+
+  //login
+ login(BuildContext context,
+     String fullName,
+     int password,
+     int cPassword,
+     Function(String) onError,
+      Function(dynamic) onSuccess) async {
+    // check internet
+    if (await Utils.isInternetConnected()) {
+      try {
+        LoginResponse loginResponse = await apiClient.login(fullName ,password ,cPassword);
+        onSuccess(loginResponse);
+      } on DioException catch (e) {
+        Utils.getErrorApi(e, onError, context);
+      }
+    } else {
+      onError("Please check your internet connection and try again.");
+    }
+  }
+
+  //Register
+  register(BuildContext context,
+      String firmName,
+      String fullName,
+      String email,
+      int whatsappNo,
+      String birthDate,
+      int stateId,
+      String city,
+      String address,
+      int pincode,
+      int role,
+      int password,
+      int cPassword,
+      Function(String) onError,
+      Function(dynamic) onSuccess) async {
+    // check internet
+    if (await Utils.isInternetConnected()) {
+      try {
+        RegisterResponse registerResponse = await apiClient.register(firmName,
+           fullName,
+           email,
+           whatsappNo,
+           birthDate,
+           stateId,
+           city,
+           address,
+           pincode,
+           role,
+           password,
+           cPassword,);
+        onSuccess(registerResponse);
       } on DioException catch (e) {
         Utils.getErrorApi(e, onError, context);
       }
