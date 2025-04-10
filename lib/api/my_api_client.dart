@@ -34,27 +34,23 @@ abstract class MyApiClient {
 
   // login
   @POST("auth/login")
-  Future<LoginResponse> login(
-    @Query("full_name") String fullName,
-    @Query("password") int password,
-    @Query("c_password") int cPassword,
+  Future<LoginResponse> login(@Query("full_name") String fullName, @Query("password") String password,
   );
 
   //register
-// login
   @POST("auth/register")
   Future<RegisterResponse> register(
       @Query("firm_name")  String firmName,
       @Query("full_name")   String fullName,
       @Query("email") String email,
-      @Query("whatsapp_no") int whatsappNo,
+      @Query("whatsapp_no") String whatsappNo,
       @Query("birth_date") String birthDate,
       @Query("state_id")  int stateId,
       @Query("city") String city,
       @Query("address")    String address,
-      @Query("pincode")     int pincode,
+      @Query("pincode")     String pincode,
       @Query("role")    int role,
-      @Query("password") int password,
-      @Query("c_password") int cPassword,
+      @Query("password") String password,
+      @Query("c_password") String cPassword,
       );
 }

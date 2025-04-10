@@ -7,10 +7,14 @@ import 'package:mono/utils/custom_strings.dart';
 import 'package:mono/utils/utils.dart';
 import 'package:mono/widgets/custom_textfield_widget.dart';
 import 'package:mono/widgets/text_widget.dart';
+import '../../Api/api_repo.dart';
+import '../../Api/my_api_utils.dart';
+import '../../model/register/register_response.dart';
 import '../dashboard/dashboard_screen.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
+
   static String routeName = '/signup_screen';
 
   @override
@@ -29,9 +33,15 @@ class _SignupScreenState extends State<SignupScreen> {
   TextEditingController address = TextEditingController();
   TextEditingController pinCode = TextEditingController();
 
+  RegisterResponse registerResponse = RegisterResponse();
+
+  int? _selectedValue = 0;
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   var states = ["Gujarat", "Maharashtra"];
   String currentSelectedValue = "Gujarat";
+
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +84,8 @@ class _SignupScreenState extends State<SignupScreen> {
                         hintColor: CustomColor.prefixIconColor,
                         inputBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
-                          borderSide: const BorderSide(color: CustomColor.prefixIconColor),
+                          borderSide: const BorderSide(
+                              color: CustomColor.prefixIconColor),
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -95,7 +106,8 @@ class _SignupScreenState extends State<SignupScreen> {
                         hintColor: CustomColor.prefixIconColor,
                         inputBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
-                          borderSide: const BorderSide(color: CustomColor.prefixIconColor),
+                          borderSide: const BorderSide(
+                              color: CustomColor.prefixIconColor),
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -116,7 +128,8 @@ class _SignupScreenState extends State<SignupScreen> {
                         hintColor: CustomColor.prefixIconColor,
                         inputBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
-                          borderSide: const BorderSide(color: CustomColor.prefixIconColor),
+                          borderSide: const BorderSide(
+                              color: CustomColor.prefixIconColor),
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -140,7 +153,8 @@ class _SignupScreenState extends State<SignupScreen> {
                         textInputType: TextInputType.number,
                         inputBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
-                          borderSide: const BorderSide(color: CustomColor.prefixIconColor),
+                          borderSide: const BorderSide(
+                              color: CustomColor.prefixIconColor),
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -163,7 +177,8 @@ class _SignupScreenState extends State<SignupScreen> {
                         hintColor: CustomColor.prefixIconColor,
                         inputBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
-                          borderSide: const BorderSide(color: CustomColor.prefixIconColor),
+                          borderSide: const BorderSide(
+                              color: CustomColor.prefixIconColor),
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -184,7 +199,8 @@ class _SignupScreenState extends State<SignupScreen> {
                         hintColor: CustomColor.prefixIconColor,
                         inputBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
-                          borderSide: const BorderSide(color: CustomColor.prefixIconColor),
+                          borderSide: const BorderSide(
+                              color: CustomColor.prefixIconColor),
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -205,7 +221,8 @@ class _SignupScreenState extends State<SignupScreen> {
                         hintColor: CustomColor.prefixIconColor,
                         inputBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
-                          borderSide: const BorderSide(color: CustomColor.prefixIconColor),
+                          borderSide: const BorderSide(
+                              color: CustomColor.prefixIconColor),
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -219,12 +236,15 @@ class _SignupScreenState extends State<SignupScreen> {
                       const SizedBox(height: 15),
                       InputDecorator(
                         decoration: InputDecoration(
-                          labelStyle: GoogleFonts.poppins(color: CustomColor.themeColor, fontSize: 16.0),
-                          errorStyle: GoogleFonts.poppins(color: CustomColor.themeColor, fontSize: 16.0),
+                          labelStyle: GoogleFonts.poppins(
+                              color: CustomColor.themeColor, fontSize: 16.0),
+                          errorStyle: GoogleFonts.poppins(
+                              color: CustomColor.themeColor, fontSize: 16.0),
                           hintText: 'Please select State',
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
-                            borderSide: const BorderSide(color: CustomColor.prefixIconColor),
+                            borderSide: const BorderSide(
+                                color: CustomColor.prefixIconColor),
                           ),
                         ),
                         isEmpty: currentSelectedValue == '',
@@ -259,7 +279,8 @@ class _SignupScreenState extends State<SignupScreen> {
                         hintColor: CustomColor.prefixIconColor,
                         inputBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
-                          borderSide: const BorderSide(color: CustomColor.prefixIconColor),
+                          borderSide: const BorderSide(
+                              color: CustomColor.prefixIconColor),
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -280,7 +301,8 @@ class _SignupScreenState extends State<SignupScreen> {
                         hintColor: CustomColor.prefixIconColor,
                         inputBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
-                          borderSide: const BorderSide(color: CustomColor.prefixIconColor),
+                          borderSide: const BorderSide(
+                              color: CustomColor.prefixIconColor),
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -302,7 +324,8 @@ class _SignupScreenState extends State<SignupScreen> {
                         hintColor: CustomColor.prefixIconColor,
                         inputBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
-                          borderSide: const BorderSide(color: CustomColor.prefixIconColor),
+                          borderSide: const BorderSide(
+                              color: CustomColor.prefixIconColor),
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -311,16 +334,86 @@ class _SignupScreenState extends State<SignupScreen> {
                           return null;
                         },
                       ),
+                      Column(
+                        children: [
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              addRadioButton(0, 'Seller'),
+                              addRadioButton(1, 'Distributor'),
+                            ],
+                          ),
+                        ],
+                      ),
                       const SizedBox(height: 20),
                       GestureDetector(
                         onTap: () {
-                          if (_formKey.currentState?.validate() ?? false) {
-                            Navigator.pushNamed(context, DashboardBaseScreen.routeName);
+                          if (firmName.text.isEmpty) {
+                            Utils.showToast('Enter a firmName');
+                            return;
                           }
+                          if (fullName.text.isEmpty) {
+                            Utils.showToast('Enter a fullName');
+                            return;
+                          }
+                          if (email.text.isEmpty) {
+                            Utils.showToast('Enter a email');
+                            return;
+                          }
+                          if (whatsappNo.text.isEmpty) {
+                            Utils.showToast('Enter a whatsappNo');
+                            return;
+                          }
+                          if (birthDate.text.isEmpty) {
+                            Utils.showToast('Enter a birthDate');
+                            return;
+                          }
+                          if (city.text.isEmpty) {
+                            Utils.showToast('Enter a city');
+                            return;
+                          }
+                          if (address.text.isEmpty) {
+                            Utils.showToast('Enter a address');
+                            return;
+                          }
+                          if (pinCode.text.isEmpty) {
+                            Utils.showToast('Enter a pinCode');
+                            return;
+                          }
+                          if (password.text.isEmpty) {
+                            Utils.showToast('Enter a password');
+                            return;
+                          }
+                          if (confirmPassword.text.isEmpty) {
+                            Utils.showToast('Enter a confirmPassword');
+                            return;
+                          }
+
+
+                          register(
+                            firmName.text,
+                            fullName.text,
+                            email.text,
+                            whatsappNo.text,
+                            birthDate.text,
+                            city.text,
+                            address.text,
+                            pinCode.text,
+                            password.text,
+                            confirmPassword.text,
+
+
+
+                          );
                         },
                         child: Container(
                           width: MediaQuery.of(context).size.width,
-                          decoration: BoxDecoration(color: CustomColor.themeColor, borderRadius: BorderRadius.circular(50)),
+                          decoration: BoxDecoration(
+                              color: CustomColor.themeColor,
+                              borderRadius: BorderRadius.circular(50)),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 11.0),
                             child: Center(
@@ -348,7 +441,8 @@ class _SignupScreenState extends State<SignupScreen> {
                           const SizedBox(width: 5),
                           GestureDetector(
                             onTap: () {
-                              Navigator.pushNamed(context, LoginScreen.routeName);
+                              Navigator.pushNamed(
+                                  context, LoginScreen.routeName);
                             },
                             child: TextWrapper(
                               textShow: CustomString.loginButton,
@@ -374,5 +468,94 @@ class _SignupScreenState extends State<SignupScreen> {
   bool isValidEmail(String email) {
     final regex = RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$');
     return regex.hasMatch(email);
+  }
+
+  Widget addRadioButton(int value, String label) {
+    bool isSelected = _selectedValue == value;
+
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _selectedValue = value;
+        });
+      },
+      child: Row(
+        children: [
+          Container(
+            width: 20,
+            height: 20,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: Colors.black, width: 2),
+              color: isSelected ? Colors.red : Colors.white,
+            ),
+          ),
+          SizedBox(
+            width: 10,
+          ),
+          Text(label),
+          SizedBox(
+            width: 12,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> register(
+      String firmName,
+      String fullName,
+      String email,
+      String whatsappNo,
+      String birthDate,
+      String city,
+      String address,
+      String pincode,
+      String password,
+      String cPassword,
+      ) async {
+    int stateId = states.indexOf(currentSelectedValue);
+    int role = _selectedValue ?? 0;
+
+    setState(() {
+      isLoading = true;
+    });
+
+    // Call the API
+    await ApiRepo("", null, baseUrl: MyApiUtils.baseUrl).register(
+      context,
+      firmName,
+      fullName,
+      email,
+      whatsappNo,
+      birthDate,
+      stateId,
+      city,
+      address,
+      pincode,
+      role,
+      password,
+      cPassword,
+          (error) {
+        setState(() {
+          isLoading = false;
+        });
+        print('API Error:$error');
+        Utils.showToast("Server Error: $error");
+      },
+          (response) {
+        setState(() {
+          registerResponse = response;
+          isLoading = false;
+        });
+
+        Navigator.pushNamed(context, LoginScreen.routeName);
+
+        // Handle success response
+        if (response is RegisterResponse) {
+          Utils.showToast(response.message ?? "Signup successfully");
+        }
+      },
+    );
   }
 }

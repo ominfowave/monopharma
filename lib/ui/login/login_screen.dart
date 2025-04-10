@@ -22,13 +22,9 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  // username controller
   TextEditingController userNameController = TextEditingController();
-
-  // password controller
   TextEditingController passwordController = TextEditingController();
 
-  // form key for validation
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   bool passwordVisible = false;
@@ -53,33 +49,30 @@ class _LoginScreenState extends State<LoginScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
-                child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TextWrapper(
-                    textShow: CustomString.login,
-                    fontSize: 40,
-                    fontWeight: FontWeight.bold,
-                    textColor: CustomColor.themeColor,
-                  ),
-                  const SizedBox(
-                    height: 80,
-                  ),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: TextWrapper(
-                      textShow: CustomString.userName,
-                      fontSize: 14,
-                      fontWeight: FontWeight.normal,
-                      textColor: CustomColor.userNamePassTextColor,
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextWrapper(
+                      textShow: CustomString.login,
+                      fontSize: 40,
+                      fontWeight: FontWeight.bold,
+                      textColor: CustomColor.themeColor,
                     ),
-                  ),
-                  TextFormField(
-                    controller: userNameController,
-                    readOnly: false,
-                    decoration: InputDecoration(
+                    const SizedBox(height: 80),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: TextWrapper(
+                        textShow: CustomString.userName,
+                        fontSize: 14,
+                        fontWeight: FontWeight.normal,
+                        textColor: CustomColor.userNamePassTextColor,
+                      ),
+                    ),
+                    TextFormField(
+                      controller: userNameController,
+                      decoration: InputDecoration(
                         hintText: CustomString.userNameHint,
                         prefixIcon: const Icon(
                           Icons.person,
@@ -87,37 +80,37 @@ class _LoginScreenState extends State<LoginScreen> {
                           size: 20,
                         ),
                         counterText: "",
-                        contentPadding: const EdgeInsets.only(top: 15)),
-                    style: GoogleFonts.poppins(
-                        color: CustomColor.userNamePassTextColor, fontSize: 14),
-                    maxLength: 25,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return CustomString.errorEmptyUserName;
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: TextWrapper(
-                      textShow: CustomString.password,
-                      fontSize: 14,
-                      fontWeight: FontWeight.normal,
-                      textColor: CustomColor.userNamePassTextColor,
+                        contentPadding: const EdgeInsets.only(top: 15),
+                      ),
+                      style: GoogleFonts.poppins(
+                        color: CustomColor.userNamePassTextColor,
+                        fontSize: 14,
+                      ),
+                      maxLength: 25,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return CustomString.errorEmptyUserName;
+                        }
+                        return null;
+                      },
                     ),
-                  ),
-                  TextFormField(
-                    controller: passwordController,
-                    readOnly: false,
-                    obscureText: !passwordVisible,
-                    decoration: InputDecoration(
+                    const SizedBox(height: 20),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: TextWrapper(
+                        textShow: CustomString.password,
+                        fontSize: 14,
+                        fontWeight: FontWeight.normal,
+                        textColor: CustomColor.userNamePassTextColor,
+                      ),
+                    ),
+                    TextFormField(
+                      controller: passwordController,
+                      obscureText: !passwordVisible,
+                      decoration: InputDecoration(
                         hintText: CustomString.passwordHint,
                         prefixIcon: const Icon(
-                          Icons.person,
+                          Icons.lock,
                           color: CustomColor.prefixIconColor,
                           size: 20,
                         ),
@@ -135,79 +128,78 @@ class _LoginScreenState extends State<LoginScreen> {
                           },
                         ),
                         counterText: "",
-                        contentPadding: const EdgeInsets.only(top: 15)),
-                    style: GoogleFonts.poppins(
-                        color: CustomColor.userNamePassTextColor, fontSize: 14),
-                    maxLength: 25,
-                    keyboardType: TextInputType.visiblePassword,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return CustomString.errorEmptyPassword;
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: TextWrapper(
-                      textShow: CustomString.forgotPassword,
-                      fontSize: 13,
-                      fontWeight: FontWeight.normal,
-                      textColor: CustomColor.userNamePassTextColor,
+                        contentPadding: const EdgeInsets.only(top: 15),
+                      ),
+                      style: GoogleFonts.poppins(
+                        color: CustomColor.userNamePassTextColor,
+                        fontSize: 14,
+                      ),
+                      maxLength: 25,
+                      keyboardType: TextInputType.visiblePassword,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return CustomString.errorEmptyPassword;
+                        }
+                        return null;
+                      },
                     ),
-                  ),
-                  const SizedBox(
-                    height: 80,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      if (userNameController.text.isEmpty) {
-                        Utils.showToast('Enter a Username');
-                        return;
-                      }
-                      if (passwordController.text.isEmpty) {
-                        Utils.showToast('Enter a Password');
-                        return;
-                      }
+                    const SizedBox(height: 20),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: TextWrapper(
+                        textShow: CustomString.forgotPassword,
+                        fontSize: 13,
+                        fontWeight: FontWeight.normal,
+                        textColor: CustomColor.userNamePassTextColor,
+                      ),
+                    ),
+                    const SizedBox(height: 80),
+                    GestureDetector(
+                      onTap: () {
 
-                      if (_formKey.currentState?.validate() ?? false) {}
-                      Navigator.pushNamed(
-                          context, DashboardBaseScreen.routeName);
-                    },
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
+                        if (userNameController.text.isEmpty) {
+                          Utils.showToast('Enter a Username');
+                          return;
+                        }
+                        if (passwordController.text.isEmpty) {
+                          Utils.showToast('Enter a password');
+                          return;
+                        }
+
+                          login(userNameController.text, passwordController.text);
+
+                      },
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
                           color: CustomColor.themeColor,
-                          borderRadius: BorderRadius.circular(50)),
-                      child: Padding(
+                          borderRadius: BorderRadius.circular(50),
+                        ),
                         padding: const EdgeInsets.symmetric(vertical: 12.0),
                         child: Center(
                           child: isLoading
                               ? const SizedBox(
-                                  width: 20,
-                                  height: 20,
-                                  child: CircularProgressIndicator(
-                                    color: Colors.white,
-                                    strokeWidth: 2,
-                                  ),
-                                )
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2,
+                            ),
+                          )
                               : TextWrapper(
-                                  textShow: CustomString.loginButton,
-                                  height: 0,
-                                  textColor: CustomColor.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                ),
+                            textShow: CustomString.loginButton,
+                            height: 0,
+                            textColor: CustomColor.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            )),
+            ),
             Column(
               children: [
                 Row(
@@ -219,9 +211,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       fontSize: 13,
                       fontWeight: FontWeight.normal,
                     ),
-                    const SizedBox(
-                      width: 5,
-                    ),
+                    const SizedBox(width: 5),
                     GestureDetector(
                       onTap: () {
                         Navigator.pushNamed(context, SignupScreen.routeName);
@@ -232,12 +222,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
                       ),
-                    )
+                    ),
                   ],
                 ),
-                const SizedBox(
-                  height: 40,
-                )
+                const SizedBox(height: 40),
               ],
             )
           ],
@@ -246,34 +234,40 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  //login api call
-  Future<void> login(fullName, password, cPassword) async {
+  Future<void> login(String username ,String password) async {
     setState(() {
       isLoading = true;
     });
     // Call the API
     await ApiRepo("", null, baseUrl: MyApiUtils.baseUrl).login(
       context,
-      fullName,
-      password,
-      cPassword,
-      (error) {
+      userNameController.text,
+      passwordController.text,
+
+          (error) {
         setState(() {
           isLoading = false;
         });
         print('API Error:$error');
         Utils.showToast("Server Error: $error");
       },
-      (response) {
+          (response) {
         setState(() {
           loginResponse = response;
           isLoading = false;
         });
+        prefs.setToken("Bearer ${loginResponse.data!.token!}");
+        prefs.setUserInfo(loginResponse);
 
+          Navigator.pushNamed(context, DashboardBaseScreen.routeName);
+          prefs.setRole(true);
+
+        // Handle success response
         if (response is LoginResponse) {
           Utils.showToast(response.message ?? "login successfully");
         }
       },
     );
   }
+
 }

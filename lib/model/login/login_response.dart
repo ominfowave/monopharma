@@ -4,13 +4,15 @@ part 'login_response.g.dart';
 
 @JsonSerializable()
 class LoginResponse {
-  String? result;
-  String? message;
-  Data? data;
+  final String? result;
+  final String? message;
+  final Data? data;
 
   LoginResponse({this.result, this.message, this.data});
 
-  factory LoginResponse.fromJson(Map<String, dynamic> json) => _$LoginResponseFromJson(json);
+  factory LoginResponse.fromJson(Map<String, dynamic> json) =>
+      _$LoginResponseFromJson(json);
+
   Map<String, dynamic> toJson() => _$LoginResponseToJson(this);
 }
 
@@ -22,6 +24,7 @@ class Data {
   Data({this.token, this.user});
 
   factory Data.fromJson(Map<String, dynamic> json) => _$DataFromJson(json);
+
   Map<String, dynamic> toJson() => _$DataToJson(this);
 }
 
@@ -74,5 +77,6 @@ class User {
   });
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+
   Map<String, dynamic> toJson() => _$UserToJson(this);
 }

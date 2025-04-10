@@ -103,14 +103,13 @@ class ApiRepo {
   //login
  login(BuildContext context,
      String fullName,
-     int password,
-     int cPassword,
+     String password,
      Function(String) onError,
       Function(dynamic) onSuccess) async {
     // check internet
     if (await Utils.isInternetConnected()) {
       try {
-        LoginResponse loginResponse = await apiClient.login(fullName ,password ,cPassword);
+        LoginResponse loginResponse = await apiClient.login(fullName,password);
         onSuccess(loginResponse);
       } on DioException catch (e) {
         Utils.getErrorApi(e, onError, context);
@@ -125,15 +124,15 @@ class ApiRepo {
       String firmName,
       String fullName,
       String email,
-      int whatsappNo,
+      String whatsappNo,
       String birthDate,
       int stateId,
       String city,
       String address,
-      int pincode,
+      String pincode,
       int role,
-      int password,
-      int cPassword,
+      String password,
+      String cPassword,
       Function(String) onError,
       Function(dynamic) onSuccess) async {
     // check internet

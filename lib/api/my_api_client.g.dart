@@ -158,14 +158,12 @@ class _MyApiClient implements MyApiClient {
   @override
   Future<LoginResponse> login(
     String fullName,
-    int password,
-    int cPassword,
+    String password,
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'full_name': fullName,
       r'password': password,
-      r'c_password': cPassword,
     };
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
@@ -201,15 +199,15 @@ class _MyApiClient implements MyApiClient {
     String firmName,
     String fullName,
     String email,
-    int whatsappNo,
+    String whatsappNo,
     String birthDate,
     int stateId,
     String city,
     String address,
-    int pincode,
+    String pincode,
     int role,
-    int password,
-    int cPassword,
+    String password,
+    String cPassword,
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
