@@ -549,7 +549,9 @@ class _SignupScreenState extends State<SignupScreen> {
           isLoading = false;
         });
 
-        Navigator.pushNamed(context, LoginScreen.routeName);
+        if(registerResponse.result == "success" && registerResponse.message == "User Created Successfully!") {
+          Navigator.pushNamed(context, LoginScreen.routeName);
+        }
 
         // Handle success response
         if (response is RegisterResponse) {

@@ -165,9 +165,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           Utils.showToast('Enter a password');
                           return;
                         }
-
                           login(userNameController.text, passwordController.text);
-
                       },
                       child: Container(
                         width: MediaQuery.of(context).size.width,
@@ -256,11 +254,13 @@ class _LoginScreenState extends State<LoginScreen> {
           loginResponse = response;
           isLoading = false;
         });
-        prefs.setToken("Bearer ${loginResponse.data!.token!}");
-        prefs.setUserInfo(loginResponse);
+        if(loginResponse.result == "success" && loginResponse.message == "User Login Successfully!") {
+          prefs.setToken("Bearer ${loginResponse.data!.token!}");
+          prefs.setUserInfo(loginResponse);
 
           Navigator.pushNamed(context, DashboardBaseScreen.routeName);
           prefs.setRole(true);
+        }
 
         // Handle success response
         if (response is LoginResponse) {
