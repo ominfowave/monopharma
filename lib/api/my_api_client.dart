@@ -4,8 +4,11 @@ import 'package:retrofit/http.dart';
 
 import '../model/divisions/divisions_listing/divisions_listing_response.dart';
 import '../model/login/login_response.dart';
+import '../model/product/Generate product/Generate_product_response.dart';
 import '../model/product/product view/product_view_response.dart';
 import '../model/product/product_listing/product_listing_response.dart';
+import '../model/product/search product/search_product_response.dart';
+import '../model/product/user all pdf/user_all_pdf_response.dart';
 import '../model/register/register_response.dart';
 import '../model/segments/segments_listing/segments_listing_response.dart';
 import 'my_api_utils.dart';
@@ -34,23 +37,45 @@ abstract class MyApiClient {
 
   // login
   @POST("login")
-  Future<LoginResponse> login(@Query("full_name") String fullName, @Query("password") String password,
+  Future<LoginResponse> login(
+    @Query("full_name") String fullName,
+    @Query("password") String password,
   );
 
   //register
   @POST("register")
   Future<RegisterResponse> register(
-      @Query("firm_name")  String firmName,
-      @Query("full_name")   String fullName,
-      @Query("email") String email,
-      @Query("whatsapp_no") String whatsappNo,
-      @Query("birth_date") String birthDate,
-      @Query("state_id")  int stateId,
-      @Query("city") String city,
-      @Query("address")    String address,
-      @Query("pincode")     String pincode,
-      @Query("role")    int role,
-      @Query("password") String password,
-      @Query("c_password") String cPassword,
+    @Query("firm_name") String firmName,
+    @Query("full_name") String fullName,
+    @Query("email") String email,
+    @Query("whatsapp_no") String whatsappNo,
+    @Query("birth_date") String birthDate,
+    @Query("state_id") int stateId,
+    @Query("city") String city,
+    @Query("address") String address,
+    @Query("pincode") String pincode,
+    @Query("role") int role,
+    @Query("password") String password,
+    @Query("c_password") String cPassword,
+  );
+
+
+
+  // search product
+  @POST("search/product")
+  Future<SearchProductResponse> searchProduct(
+      @Query("segment_id") int segmentId,
+      @Query("composition") String? composition);
+
+  // user all pdf
+  @POST("product-pdf")
+  Future<UserAllPdfResponse> userAllPdf();
+
+  // generate product
+  @POST("generate-product-pdf")
+  Future<GenerateProductResponse> generateProductPdf(
+      @Query("segment_id") int segmentId,
+      @Query("division_id") int divisionId,
       );
+
 }

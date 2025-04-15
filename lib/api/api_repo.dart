@@ -3,7 +3,10 @@ import 'package:flutter/cupertino.dart';
 
 import '../model/divisions/divisions_listing/divisions_listing_response.dart';
 import '../model/login/login_response.dart';
+import '../model/product/Generate product/Generate_product_response.dart';
 import '../model/product/product_listing/product_listing_response.dart';
+import '../model/product/search product/search_product_response.dart';
+import '../model/product/user all pdf/user_all_pdf_response.dart';
 import '../model/register/register_response.dart';
 import '../model/segments/segments_listing/segments_listing_response.dart';
 import '../utils/utils.dart';
@@ -68,6 +71,7 @@ class ApiRepo {
       onError("Please check your internet connection and try again.");
     }
   }
+
   // divisions listing
   divisionsListing(BuildContext context, Function(String) onError,
       Function(dynamic) onSuccess) async {
@@ -158,4 +162,61 @@ class ApiRepo {
       onError("Please check your internet connection and try again.");
     }
   }
+
+
+  // search product
+  searchProduct(
+      BuildContext context,
+      int segmentId,
+      String? composition,
+      Function(String) onError,
+      Function(dynamic) onSuccess) async {
+    // check internet
+    if (await Utils.isInternetConnected()) {
+      try {
+        SearchProductResponse searchProductResponse = await apiClient.searchProduct(segmentId,composition);
+        onSuccess(searchProductResponse);
+      } on DioException catch (e) {
+        Utils.getErrorApi(e, onError, context);
+      }
+    } else {
+      onError("Please check your internet connection and try again.");
+    }
+  }
+
+  //user all pdf
+  userAllPdf(BuildContext context, Function(String) onError,
+      Function(dynamic) onSuccess) async {
+    // check internet
+    if (await Utils.isInternetConnected()) {
+      try {
+        UserAllPdfResponse userAllPdfResponse = await apiClient.userAllPdf();
+        onSuccess(userAllPdfResponse);
+      } on DioException catch (e) {
+        Utils.getErrorApi(e, onError, context);
+      }
+    } else {
+      onError("Please check your internet connection and try again.");
+    }
+  }
+
+  //Generate product pdf
+  generateProductPdf(BuildContext context,
+      int segmentId,
+      int divisionId,
+      Function(String) onError,
+      Function(dynamic) onSuccess) async {
+    // check internet
+    if (await Utils.isInternetConnected()) {
+      try {
+        GenerateProductResponse generateProductResponse = await apiClient.generateProductPdf(segmentId,divisionId);
+        onSuccess(generateProductResponse);
+      } on DioException catch (e) {
+        Utils.getErrorApi(e, onError, context);
+      }
+    } else {
+      onError("Please check your internet connection and try again.");
+    }
+  }
+
 }

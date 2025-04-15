@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mono/ui/lbs/lbs_screen.dart';
 import 'package:mono/utils/colors.dart';
 import 'package:mono/utils/custom_strings.dart';
 import 'package:mono/utils/image_constant.dart';
@@ -24,6 +25,8 @@ class _ProductDetailState extends State<ProductDetail> {
   ProductViewResponse productViewResponse = ProductViewResponse();
   SharedPref prefs = SharedPref();
   bool isFirst = true;
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -247,27 +250,36 @@ class _ProductDetailState extends State<ProductDetail> {
               ),
               GestureDetector(
                 onTap: () {
-
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => LbsScreen(
+                        imageUrl:  productViewResponse.data!.image ?? '', // passing image URL from API
+                      ),
+                    ),
+                  );
                 },
                 child: Container(
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
-                      color: CustomColor.themeColor,
-                      borderRadius: BorderRadius.circular(50)),
+                    color: CustomColor.themeColor,
+                    borderRadius: BorderRadius.circular(50),
+                  ),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 12.0),
                     child: Center(
-                        child: TextWrapper(
-                      textShow: CustomString.lbc,
-                      height: 0,
-                      textColor: CustomColor.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14,
-                    )),
+                      child: TextWrapper(
+                        textShow: CustomString.lbc,
+                        height: 0,
+                        textColor: CustomColor.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                      ),
+                    ),
                   ),
                 ),
               ),
-              ],
+
+            ],
           ),
         ),
       ),
