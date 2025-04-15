@@ -33,12 +33,12 @@ abstract class MyApiClient {
   Future<SegmentsListingResponse> segmentsListing();
 
   // login
-  @POST("auth/login")
+  @POST("login")
   Future<LoginResponse> login(@Query("full_name") String fullName, @Query("password") String password,
   );
 
   //register
-  @POST("auth/register")
+  @POST("register")
   Future<RegisterResponse> register(
       @Query("firm_name")  String firmName,
       @Query("full_name")   String fullName,

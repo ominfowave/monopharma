@@ -14,7 +14,7 @@ class _MyApiClient implements MyApiClient {
     this.baseUrl,
     this.errorLogger,
   }) {
-    baseUrl ??= 'http://159.65.145.240:8000/api/';
+    baseUrl ??= 'http://159.65.145.240:8000/api/auth/';
   }
 
   final Dio _dio;
@@ -174,7 +174,7 @@ class _MyApiClient implements MyApiClient {
     )
         .compose(
           _dio.options,
-          'auth/login',
+          'login',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -233,7 +233,7 @@ class _MyApiClient implements MyApiClient {
     )
         .compose(
           _dio.options,
-          'auth/register',
+          'register',
           queryParameters: queryParameters,
           data: _data,
         )

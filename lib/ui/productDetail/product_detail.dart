@@ -64,7 +64,6 @@ class _ProductDetailState extends State<ProductDetail> {
                     height: 250.0,
                     fit: BoxFit.cover,
 
-
                   )),
               ),
               const SizedBox(
@@ -247,7 +246,9 @@ class _ProductDetailState extends State<ProductDetail> {
                 height: 20,
               ),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+
+                },
                 child: Container(
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
