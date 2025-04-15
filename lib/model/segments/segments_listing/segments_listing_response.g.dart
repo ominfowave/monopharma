@@ -27,9 +27,13 @@ Map<String, dynamic> _$SegmentsListingResponseToJson(
 Data _$DataFromJson(Map<String, dynamic> json) => Data(
       id: (json['id'] as num?)?.toInt(),
       segmentName: json['segment_name'] as String?,
+      divisionId: (json['division_id'] as num?)?.toInt(),
+      divisionName: json['division_name'] as String?,
     );
 
 Map<String, dynamic> _$DataToJson(Data instance) => <String, dynamic>{
       'id': instance.id,
       'segment_name': instance.segmentName,
+      'division_id': instance.divisionId,
+      'division_name': instance.divisionName,
     };

@@ -10,9 +10,9 @@ ProductViewResponse _$ProductViewResponseFromJson(Map<String, dynamic> json) =>
     ProductViewResponse(
       result: json['result'] as String?,
       message: json['message'] as String?,
-      data: (json['data'] as List<dynamic>?)
-          ?.map((e) => Data.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      data: json['data'] == null
+          ? null
+          : Data.fromJson(json['data'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$ProductViewResponseToJson(
@@ -20,7 +20,7 @@ Map<String, dynamic> _$ProductViewResponseToJson(
     <String, dynamic>{
       'result': instance.result,
       'message': instance.message,
-      'data': instance.data?.map((e) => e.toJson()).toList(),
+      'data': instance.data,
     };
 
 Data _$DataFromJson(Map<String, dynamic> json) => Data(
@@ -30,7 +30,7 @@ Data _$DataFromJson(Map<String, dynamic> json) => Data(
       productImage: json['product_image'] as String?,
       productPrice: json['product_price'] as String?,
       productPack: json['product_pack'] as String?,
-      isLbcVisualised: (json['is_lbc_visualised'] as num?)?.toInt(),
+      image: json['image'] as String?,
       categoryName: json['category_name'] as String?,
       segmentName: json['segment_name'] as String?,
       divisionName: json['division_name'] as String?,
@@ -43,7 +43,7 @@ Map<String, dynamic> _$DataToJson(Data instance) => <String, dynamic>{
       'product_image': instance.productImage,
       'product_price': instance.productPrice,
       'product_pack': instance.productPack,
-      'is_lbc_visualised': instance.isLbcVisualised,
+      'image': instance.image,
       'category_name': instance.categoryName,
       'segment_name': instance.segmentName,
       'division_name': instance.divisionName,

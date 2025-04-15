@@ -23,7 +23,18 @@ class Data {
   @JsonKey(name: 'segment_name')
   final String? segmentName;
 
-  Data({this.id, this.segmentName});
+  @JsonKey(name: 'division_id')
+  final int? divisionId;
+
+  @JsonKey(name: 'division_name')
+  final String? divisionName;
+
+  Data({
+    this.id,
+    this.segmentName,
+    this.divisionId,
+    this.divisionName,
+  });
 
   factory Data.fromJson(Map<String, dynamic> json) => _$DataFromJson(json);
 

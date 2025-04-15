@@ -2,11 +2,11 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'product_view_response.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable()
 class ProductViewResponse {
   final String? result;
   final String? message;
-  final List<Data>? data;
+  final Data? data;
 
   ProductViewResponse({this.result, this.message, this.data});
 
@@ -29,8 +29,7 @@ class Data {
   final String? productPrice;
   @JsonKey(name: 'product_pack')
   final String? productPack;
-  @JsonKey(name: 'is_lbc_visualised')
-  final int? isLbcVisualised;
+  final String? image;
   @JsonKey(name: 'category_name')
   final String? categoryName;
   @JsonKey(name: 'segment_name')
@@ -45,7 +44,7 @@ class Data {
     this.productImage,
     this.productPrice,
     this.productPack,
-    this.isLbcVisualised,
+    this.image,
     this.categoryName,
     this.segmentName,
     this.divisionName,

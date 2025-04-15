@@ -59,7 +59,7 @@ class _ProductDetailState extends State<ProductDetail> {
                       borderRadius: BorderRadius.all(Radius.circular(20))),
                   elevation: 10,
                   child: Image.network(
-                      productViewResponse.data![0].productImage!,
+                      productViewResponse.data!.productImage!,
                     width: 280.0,
                     height: 250.0,
                     fit: BoxFit.cover,
@@ -84,7 +84,7 @@ class _ProductDetailState extends State<ProductDetail> {
 
                       const SizedBox(height: 5),
                       TextWrapper(
-                        textShow: productViewResponse.data![0].productName ?? '',
+                        textShow: productViewResponse.data!.productName ?? '',
                         fontWeight: FontWeight.w500,
                         fontSize: 16,
                       ),
@@ -118,7 +118,7 @@ class _ProductDetailState extends State<ProductDetail> {
               ),
               const SizedBox(height: 5),
               TextWrapper(
-                textShow: productViewResponse.data![0].compositionName ?? '',
+                textShow: productViewResponse.data!.compositionName ?? '',
                 fontWeight: FontWeight.w500,
                 fontSize: 16,
               ),
@@ -138,7 +138,7 @@ class _ProductDetailState extends State<ProductDetail> {
                       ),
                       const SizedBox(height: 5),
                       TextWrapper(
-                        textShow: productViewResponse.data![0].categoryName ?? '',
+                        textShow: productViewResponse.data!.categoryName ?? '',
                         fontWeight: FontWeight.w500,
                         fontSize: 16,
                       ),
@@ -157,7 +157,7 @@ class _ProductDetailState extends State<ProductDetail> {
                       ),
                       const SizedBox(height: 5),
                        TextWrapper(
-                        textShow: productViewResponse.data![0].divisionName ?? '',
+                        textShow: productViewResponse.data!.divisionName ?? '',
                         fontWeight: FontWeight.w500,
                         fontSize: 16,
                       ),
@@ -175,7 +175,7 @@ class _ProductDetailState extends State<ProductDetail> {
               ),
               const SizedBox(height: 5),
                TextWrapper(
-                textShow: productViewResponse.data![0].segmentName ?? '',
+                textShow: productViewResponse.data!.segmentName ?? '',
                 fontWeight: FontWeight.w500,
                 fontSize: 16,
               ),
@@ -204,7 +204,7 @@ class _ProductDetailState extends State<ProductDetail> {
                             height: 3,
                           ),
                            TextWrapper(
-                            textShow: "₹ ${productViewResponse.data![0].productPrice ?? ''}",
+                            textShow: "₹ ${productViewResponse.data!.productPrice ?? ''}",
                             fontWeight: FontWeight.bold,
                             fontSize: 18,
                             textColor: CustomColor.themeColor,
@@ -232,7 +232,7 @@ class _ProductDetailState extends State<ProductDetail> {
                             height: 3,
                           ),
                            TextWrapper(
-                            textShow:  productViewResponse.data![0].productPack ?? '',
+                            textShow:  productViewResponse.data!.productPack ?? '',
                             fontWeight: FontWeight.bold,
                             fontSize: 18,
                             textColor: CustomColor.themeColor,

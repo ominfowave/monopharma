@@ -20,7 +20,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool isLoading = false;
+  bool isLoading = true;
   SharedPref prefs = SharedPref();
   ProductListingResponse productListingResponse = ProductListingResponse();
 

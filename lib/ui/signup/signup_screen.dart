@@ -405,8 +405,6 @@ class _SignupScreenState extends State<SignupScreen> {
                             password.text,
                             confirmPassword.text,
 
-
-
                           );
                         },
                         child: Container(
