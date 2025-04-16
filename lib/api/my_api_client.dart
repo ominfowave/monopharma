@@ -1,10 +1,11 @@
 import 'package:dio/dio.dart';
-import 'package:mono/model/product/generate%20product/generate_product_response.dart';
+
 import 'package:retrofit/error_logger.dart';
 import 'package:retrofit/http.dart';
 
 import '../model/divisions/divisions_listing/divisions_listing_response.dart';
 import '../model/login/login_response.dart';
+import '../model/product/generate pdf/generate_product_response.dart';
 import '../model/product/product view/product_view_response.dart';
 import '../model/product/product_listing/product_listing_response.dart';
 import '../model/product/search product/search_product_response.dart';
@@ -67,7 +68,7 @@ abstract class MyApiClient {
 
   // generate product
   @POST("generate-product-pdf")
-  Future<GeneratePdfResponse> generateProductPdf(@Query("segment_id") int? segmentId, @Query("division_id") int? divisionId);
+  Future<GenerateProductResponse> generateProductPdf(@Query("segment_id") int? segmentId, @Query("division_id") int? divisionId);
 
   // user all pdf
   @POST("product-pdf")
