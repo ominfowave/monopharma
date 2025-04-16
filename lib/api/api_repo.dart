@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 
 import '../model/divisions/divisions_listing/divisions_listing_response.dart';
 import '../model/login/login_response.dart';
-import '../model/product/Generate product/Generate_product_response.dart';
+import '../model/product/generate product/generate_product_response.dart';
 import '../model/product/product_listing/product_listing_response.dart';
 import '../model/product/search product/search_product_response.dart';
 import '../model/product/user all pdf/user_all_pdf_response.dart';
@@ -11,7 +11,6 @@ import '../model/register/register_response.dart';
 import '../model/segments/segments_listing/segments_listing_response.dart';
 import '../utils/utils.dart';
 import '../model/product/product view/product_view_response.dart';
-import '../utils/utils.dart';
 import 'my_api_client.dart';
 import 'my_api_utils.dart';
 
@@ -209,7 +208,7 @@ class ApiRepo {
     // check internet
     if (await Utils.isInternetConnected()) {
       try {
-        GenerateProductResponse generateProductResponse = await apiClient.generateProductPdf(segmentId,divisionId);
+        GeneratePdfResponse generateProductResponse = await apiClient.generateProductPdf(segmentId,divisionId);
         onSuccess(generateProductResponse);
       } on DioException catch (e) {
         Utils.getErrorApi(e, onError, context);
