@@ -6,7 +6,7 @@ part 'segments_listing_response.g.dart';
 class SegmentsListingResponse {
   final String? result;
   final String? message;
-  final List<Data>? data;
+  final List<SegmentData>? data;
 
   SegmentsListingResponse({this.result, this.message, this.data});
 
@@ -17,7 +17,7 @@ class SegmentsListingResponse {
 }
 
 @JsonSerializable()
-class Data {
+class SegmentData {
   final int? id;
 
   @JsonKey(name: 'segment_name')
@@ -29,14 +29,14 @@ class Data {
   @JsonKey(name: 'division_name')
   final String? divisionName;
 
-  Data({
+  SegmentData({
     this.id,
     this.segmentName,
     this.divisionId,
     this.divisionName,
   });
 
-  factory Data.fromJson(Map<String, dynamic> json) => _$DataFromJson(json);
+  factory SegmentData.fromJson(Map<String, dynamic> json) => _$DataFromJson(json);
 
   Map<String, dynamic> toJson() => _$DataToJson(this);
 }

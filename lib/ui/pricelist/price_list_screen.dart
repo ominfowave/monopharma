@@ -24,6 +24,7 @@ class PriceListScreen extends StatefulWidget {
 
 class _PriceListScreenState extends State<PriceListScreen> {
   bool isLoading = false;
+  bool isPdfLoading = false;
   SharedPref prefs = SharedPref();
 
   SegmentsListingResponse segmentsListingResponse = SegmentsListingResponse();
@@ -34,6 +35,7 @@ class _PriceListScreenState extends State<PriceListScreen> {
 
   String? currentSelectedSegment;
   String? currentSelectedDivision;
+  SegmentData? selectedSegment;
 
   @override
   void initState() {
@@ -69,8 +71,11 @@ class _PriceListScreenState extends State<PriceListScreen> {
                 labelStyle: GoogleFonts.poppins(color: CustomColor.themeColor, fontSize: 16.0),
                 errorStyle: GoogleFonts.poppins(color: CustomColor.themeColor, fontSize: 16.0),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide: const BorderSide(color: CustomColor.prefixIconColor),
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30),
+                  borderSide: const BorderSide(color: Colors.grey),
                 ),
               ),
               isEmpty: currentSelectedSegment == null,
@@ -85,7 +90,7 @@ class _PriceListScreenState extends State<PriceListScreen> {
                       currentSelectedSegment = newValue;
 
                       // Find the corresponding division name based on the selected segment
-                      final selectedSegment = segmentsListingResponse.data?.firstWhere(
+                      selectedSegment = segmentsListingResponse.data?.firstWhere(
                             (segment) => segment.segmentName == currentSelectedSegment,
                       );
 
@@ -110,10 +115,15 @@ class _PriceListScreenState extends State<PriceListScreen> {
               controller: divisionController,
               decoration: InputDecoration(
                 hintText: 'Select a Division',
+                enabled: false,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30),
                 ),
                 focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30),
+                  borderSide: const BorderSide(color: Colors.grey),
+                ),
+                disabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30),
                   borderSide: const BorderSide(color: Colors.grey),
                 ),
@@ -125,7 +135,11 @@ class _PriceListScreenState extends State<PriceListScreen> {
             // Generate PDF Button
             GestureDetector(
               onTap: () {
-                // Add your logic for generating the PDF
+                if(selectedSegment == null){
+                  Utils.showToast("Please select segment");
+                  return;
+                }
+                generatePdf();
               },
               child: Container(
                 width: MediaQuery.of(context).size.width,
@@ -135,7 +149,7 @@ class _PriceListScreenState extends State<PriceListScreen> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12.0),
                   child: Center(
-                    child: TextWrapper(
+                    child: isPdfLoading ? const CircularProgressIndicator(color: Colors.white,) : TextWrapper(
                       textShow: CustomString.generatePDF,
                       height: 0,
                       textColor: CustomColor.white,
@@ -161,16 +175,18 @@ class _PriceListScreenState extends State<PriceListScreen> {
               child: ListView.builder(
                 itemCount: userAllPdfResponse.data?.length ?? 0,
                 itemBuilder: (context, index) {
-
-
                   return Card(
                     margin: const EdgeInsets.symmetric(vertical: 8),
                     child: ListTile(
                       title: Text(
-                        userAllPdfResponse.data![index].url ??'Unknown Segment',
+                        userAllPdfResponse.data![index].createdAt ??'Unknown Segment',
                         style: GoogleFonts.poppins(fontSize: 16),
                       ),
+                      trailing: InkWell(
+                          onTap: (){
 
+                          },
+                          child: const Icon(Icons.arrow_circle_down_outlined,size: 30,)),
                     ),
                   );
                 },
@@ -178,11 +194,6 @@ class _PriceListScreenState extends State<PriceListScreen> {
             ),
           ],
         ),
-
-
-
-
-
     ));}
 
   Future<void> fetchSegment() async {
@@ -238,6 +249,38 @@ class _PriceListScreenState extends State<PriceListScreen> {
     } catch (error) {
       setState(() {
         isLoading = false;
+      });
+      print("Error fetching user PDFs: $error");
+    }
+  }
+
+  Future<void> generatePdf() async {
+    setState(() {
+      isPdfLoading = true;
+    });
+    try {
+      String? token = await prefs.getToken();
+      ApiRepo(token, null, baseUrl: MyApiUtils.baseUrl).generateProductPdf(
+        context,selectedSegment!.id!,selectedSegment!.divisionId!,
+            (error) {
+          setState(() {
+            isPdfLoading = false;
+          });
+          Utils.showToast("Server Error: $error");
+        },
+            (response) {
+          setState(() {
+            GenerateProductResponse generateProductResponse = response;
+            isPdfLoading = false;
+            if(generateProductResponse.result == "success"){
+              fetchUserPdf();
+            }
+          });
+        },
+      );
+    } catch (error) {
+      setState(() {
+        isPdfLoading = false;
       });
       print("Error fetching user PDFs: $error");
     }

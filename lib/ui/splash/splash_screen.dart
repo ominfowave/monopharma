@@ -7,6 +7,8 @@ import 'package:mono/widgets/text_widget.dart';
 
 import '../../utils/colors.dart';
 import '../../utils/image_constant.dart';
+import '../../utils/shared_preference.dart';
+import '../dashboard/dashboard_screen.dart';
 import '../welcome/welcome_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -18,14 +20,25 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
 
+  // pref var
+  SharedPref prefs = SharedPref();
+  bool? isLogin;
+
   @override
   void initState() {
-    Timer(const Duration(seconds: 3),
-            ()=>Navigator.pushReplacement(
+    Future.delayed(
+        const Duration(seconds: 2),
+            () async{
+          isLogin = await prefs.getAlreadyLogin();
+          if(isLogin ?? false){
+            Navigator.pushReplacementNamed(context, DashboardBaseScreen.routeName);
+          }else{
+            Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => const WelcomeScreen()),
-            )
-    );
+            );
+          }
+        });
     super.initState();
   }
   @override

@@ -71,6 +71,6 @@ abstract class MyApiClient {
   Future<GenerateProductResponse> generateProductPdf(@Query("segment_id") int? segmentId, @Query("division_id") int? divisionId);
 
   // user all pdf
-  @POST("product-pdf")
+  @GET("product-pdf")
   Future<UserAllPdfResponse> userAllPdf();
 }

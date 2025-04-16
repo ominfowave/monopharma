@@ -30,7 +30,7 @@ class LbsScreen extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: _shareImage,
-            icon: Icon(Icons.share),
+            icon: const Icon(Icons.share),
           )
         ],
       ),

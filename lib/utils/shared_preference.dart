@@ -46,6 +46,7 @@ class SharedPref {
     loginResponse = LoginResponse.fromJson(jsonDecode(prefs.getString(KEY_LOGIN)!));
     return loginResponse;
   }
+
   void setAlreadyLogin(bool isLogin) async{
     final SharedPreferences prefs = await _prefs;
     prefs.setBool(KEY_ALREADY_LOGIN, isLogin);

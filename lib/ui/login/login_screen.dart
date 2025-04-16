@@ -257,6 +257,7 @@ class _LoginScreenState extends State<LoginScreen> {
         if(loginResponse.result == "success" && loginResponse.message == "User Login Successfully!") {
           prefs.setToken("Bearer ${loginResponse.data!.token!}");
           prefs.setUserInfo(loginResponse);
+          prefs.setAlreadyLogin(true);
 
           Navigator.pushNamed(context, DashboardBaseScreen.routeName);
           prefs.setRole(true);
