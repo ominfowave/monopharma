@@ -50,6 +50,10 @@ dependencies:
   # for google fonts
   google_fonts: 6.1.0
 
+  open_file: ^3.2.1
+
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

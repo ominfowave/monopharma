@@ -8,6 +8,8 @@ import 'package:mono/widgets/text_widget.dart';
 import '../../Api/api_repo.dart';
 import '../../Api/my_api_utils.dart';
 import '../../model/product/product_listing/product_listing_response.dart';
+import '../../model/product/search product/search_product_response.dart';
+import '../../model/segments/segments_listing/segments_listing_response.dart';
 import '../../utils/image_constant.dart';
 import '../../utils/shared_preference.dart';
 import '../../utils/utils.dart';
@@ -23,30 +25,24 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isLoading = true;
   SharedPref prefs = SharedPref();
   ProductListingResponse productListingResponse = ProductListingResponse();
+  SegmentsListingResponse segmentsListingResponse = SegmentsListingResponse();
+
+  SearchProductResponse searchProductResponse = SearchProductResponse();
+  TextEditingController divisionController = TextEditingController();
+  TextEditingController compositionController = TextEditingController();
+
+  String? currentSelectedSegment;
+  SegmentData? selectedSegment;
+  String? currentSelectedDivision;
 
   @override
   void initState() {
     super.initState();
     fetchProductListing();
+    fetchSegment();
+
   }
 
-  var segments = [
-    "Segment 1",
-    "Segment 2",
-  ];
-
-  var division = [
-    "Division 1",
-    "Division 2",
-  ];
-
-  var composition = [
-    "Composition 1",
-    "Composition 2",
-  ];
-  String currentSelectedSegment = "Segment 1";
-  String currentSelectedDivision = "Division 1";
-  String currentSelectedComposition = "Composition 1";
 
 
   @override
@@ -294,7 +290,11 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Container(
               padding: const EdgeInsets.all(20),
-              child: Column(
+              child:
+              isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  :
+              Column(
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -315,94 +315,96 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(height: 20,),
                   InputDecorator(
                     decoration: InputDecoration(
-                      labelStyle:  GoogleFonts.poppins(color: CustomColor.themeColor, fontSize: 16.0),
+                      labelStyle: GoogleFonts.poppins(color: CustomColor.themeColor, fontSize: 16.0),
                       errorStyle: GoogleFonts.poppins(color: CustomColor.themeColor, fontSize: 16.0),
-                      hintText: 'Please select State',
-                      border:OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
-                          borderSide: const BorderSide(color: CustomColor.prefixIconColor,)),),
-                    isEmpty: currentSelectedSegment == '',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30),
+                        borderSide: const BorderSide(color: Colors.grey),
+                      ),
+                    ),
+                    isEmpty: currentSelectedSegment == null,
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
                         dropdownColor: CustomColor.white,
                         value: currentSelectedSegment,
                         isDense: true,
+                        hint: Text('Please select Segment', style: GoogleFonts.poppins()),
                         onChanged: (String? newValue) {
                           setState(() {
-                            currentSelectedSegment = newValue!;
-                            // state.didChange(newValue);
+                            currentSelectedSegment = newValue;
+
+                            // Find the corresponding division name based on the selected segment
+                            selectedSegment = segmentsListingResponse.data?.firstWhere(
+                                  (segment) => segment.segmentName == currentSelectedSegment,
+                            );
+
+                            // Update the division controller with the division name
+                            divisionController.text = selectedSegment?.divisionName ?? '';
                           });
                         },
-                        items: segments.map((String value) {
+                        items: (segmentsListingResponse.data ?? []).map((segment) {
                           return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
+                            value: segment.segmentName,
+                            child: Text(segment.segmentName ?? '', style: GoogleFonts.poppins(fontSize: 14)),
                           );
                         }).toList(),
                       ),
                     ),
                   ),
                   const SizedBox(height: 20,),
-                  InputDecorator(
+                  TextField(
+                    controller: divisionController,
                     decoration: InputDecoration(
-                      labelStyle:  GoogleFonts.poppins(color: CustomColor.themeColor, fontSize: 16.0),
-                      errorStyle: GoogleFonts.poppins(color: CustomColor.themeColor, fontSize: 16.0),
-                      hintText: 'Please select State',
-                      border:OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
-                          borderSide: const BorderSide(color: CustomColor.prefixIconColor,)),),
-                    isEmpty: currentSelectedDivision == '',
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<String>(
-                        dropdownColor: CustomColor.white,
-                        value: currentSelectedDivision,
-                        isDense: true,
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            currentSelectedDivision = newValue!;
-                          });
-                        },
-                        items: division.map((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
+                      hintText: 'Select a Division',
+                      enabled: false,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30),
+                        borderSide: const BorderSide(color: Colors.grey),
+                      ),
+                      disabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30),
+                        borderSide: const BorderSide(color: Colors.grey),
                       ),
                     ),
                   ),
                   const SizedBox(height: 20,),
-                  InputDecorator(
+                  TextField(
+                    controller: compositionController,
                     decoration: InputDecoration(
-                      labelStyle:  GoogleFonts.poppins(color: CustomColor.themeColor, fontSize: 16.0),
-                      errorStyle: GoogleFonts.poppins(color: CustomColor.themeColor, fontSize: 16.0),
-                      hintText: 'Please select State',
-                      border:OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
-                          borderSide: const BorderSide(color: CustomColor.prefixIconColor,)),),
-                    isEmpty: currentSelectedComposition == '',
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<String>(
-                        dropdownColor: CustomColor.white,
-                        value: currentSelectedComposition,
-                        isDense: true,
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            currentSelectedComposition = newValue!;
-                          });
-                        },
-                        items: composition.map((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
+                      hintText: 'Select a Composition',
+                      enabled: true,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30),
+                        borderSide: const BorderSide(color: Colors.grey),
+                      ),
+                      disabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30),
+                        borderSide: const BorderSide(color: Colors.grey),
                       ),
                     ),
                   ),
                   const SizedBox(height: 30,),
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+
+                  if(selectedSegment != null && compositionController.text.isNotEmpty){
+                    int? segmentId  =  selectedSegment?.id;
+
+                    if(segmentId != null){
+                      fetchSearchProduct(segmentId, compositionController.text);
+                      Navigator.pop(context);
+                    }
+                  }
+                    },
                     child: Container(
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
@@ -458,6 +460,66 @@ class _HomeScreenState extends State<HomeScreen> {
         isLoading = false;
       });
       print("Error fetching product list: $error");
+    }
+  }
+
+  Future<void> fetchSegment() async {
+    setState(() {
+      isLoading = true;
+    });
+    try {
+      String? token = await prefs.getToken();
+      ApiRepo(token, null, baseUrl: MyApiUtils.baseUrl).segmentsListing(
+        context,
+            (error) {
+          setState(() {
+            isLoading = false;
+          });
+          Utils.showToast("Server Error: $error");
+        },
+            (response) {
+          setState(() {
+            segmentsListingResponse = response;
+            isLoading = false;
+          });
+        },
+      );
+    } catch (error) {
+      setState(() {
+        isLoading = false;
+      });
+      print("Error fetching segment list: $error");
+    }
+  }
+
+  Future<void> fetchSearchProduct(int segmentId, String? composition,) async {
+    setState(() {
+      isLoading = true;
+    });
+    try {
+      String? token = await prefs.getToken();
+      ApiRepo(token, null, baseUrl: MyApiUtils.baseUrl).searchProduct(
+        context,
+        segmentId,
+        composition,
+            (error) {
+          setState(() {
+            isLoading = false;
+          });
+          Utils.showToast("Server Error: $error");
+        },
+            (response) {
+          setState(() {
+            searchProductResponse = response;
+            isLoading = false;
+          });
+        },
+      );
+    } catch (error) {
+      setState(() {
+        isLoading = false;
+      });
+      print("Error fetching segment list: $error");
     }
   }
 }

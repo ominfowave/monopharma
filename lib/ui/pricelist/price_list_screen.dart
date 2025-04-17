@@ -1,9 +1,16 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mono/utils/colors.dart';
 import 'package:mono/utils/custom_strings.dart';
 import 'package:mono/utils/utils.dart';
 import 'package:mono/widgets/text_widget.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
+
 
 import '../../Api/api_repo.dart';
 import '../../Api/my_api_utils.dart';
@@ -183,9 +190,10 @@ class _PriceListScreenState extends State<PriceListScreen> {
                         style: GoogleFonts.poppins(fontSize: 16),
                       ),
                       trailing: InkWell(
-                          onTap: (){
-
+                          onTap: () {
+                            downloadAndOpenPdf(index);
                           },
+
                           child: const Icon(Icons.arrow_circle_down_outlined,size: 30,)),
                     ),
                   );
@@ -195,6 +203,29 @@ class _PriceListScreenState extends State<PriceListScreen> {
           ],
         ),
     ));}
+  Future<void> downloadAndOpenPdf(int index) async {
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      final dio = Dio();
+      var url = userAllPdfResponse.data![index].url;
+      final dir = await getApplicationDocumentsDirectory();
+      final filePath = '${dir.path}/downloaded_${DateTime.now().millisecondsSinceEpoch}.pdf';
+
+      await dio.download(url!, filePath);
+
+      OpenFile.open(filePath);
+    } catch (e) {
+      Utils.showToast("Failed to download PDF");
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
 
   Future<void> fetchSegment() async {
     setState(() {
