@@ -43,6 +43,8 @@ class Utils{
       onError("Something went wrong. Please try again later.");
     }else if(e.response!.statusCode == 400){
       onError(e.response!.data.toString());
+    }else if(e.response!.statusCode == 404){
+      onError(e.response!.data["message"] ?? "");
     }else {
       onError("Something went wrong. Please try again later.");
     }

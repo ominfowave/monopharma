@@ -259,7 +259,7 @@ class _LoginScreenState extends State<LoginScreen> {
           prefs.setUserInfo(loginResponse);
           prefs.setAlreadyLogin(true);
 
-          Navigator.pushNamed(context, DashboardBaseScreen.routeName);
+          Navigator.pushReplacementNamed(context, DashboardBaseScreen.routeName);
           prefs.setRole(true);
         }
 

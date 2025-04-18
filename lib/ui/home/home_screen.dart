@@ -88,6 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 "Log Out", 18, () {
 
                   prefs.setToken("");
+                  prefs.setAlreadyLogin(false);
                   Navigator.pop(context);
                   Navigator.pushReplacementNamed(context, LoginScreen.routeName);
                 }, CustomColor.themeColor),
@@ -106,7 +107,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: TextField(
                     cursorColor: CustomColor.themeColor,
                     decoration: InputDecoration(
-
                         fillColor: Colors.white,
                         filled: true,
                         contentPadding: const EdgeInsets.all(8),
