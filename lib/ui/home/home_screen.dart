@@ -13,6 +13,7 @@ import '../../model/segments/segments_listing/segments_listing_response.dart';
 import '../../utils/image_constant.dart';
 import '../../utils/shared_preference.dart';
 import '../../utils/utils.dart';
+import '../login/login_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -84,7 +85,12 @@ class _HomeScreenState extends State<HomeScreen> {
             listTileOption(true, Colors.black, ImageConstant.orderIcon,
                 "About Us", 18, () {}, CustomColor.themeColor),
             listTileOption(true, Colors.black, ImageConstant.orderIcon,
-                "Log Out", 18, () {}, CustomColor.themeColor),
+                "Log Out", 18, () {
+
+                  prefs.setToken("");
+                  Navigator.pop(context);
+                  Navigator.pushReplacementNamed(context, LoginScreen.routeName);
+                }, CustomColor.themeColor),
           ],
         ),
       ),
@@ -100,6 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: TextField(
                     cursorColor: CustomColor.themeColor,
                     decoration: InputDecoration(
+
                         fillColor: Colors.white,
                         filled: true,
                         contentPadding: const EdgeInsets.all(8),

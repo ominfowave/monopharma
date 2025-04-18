@@ -157,12 +157,12 @@ class _MyApiClient implements MyApiClient {
 
   @override
   Future<LoginResponse> login(
-    String fullName,
+    String email,
     String password,
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
-      r'full_name': fullName,
+      r'email': email,
       r'password': password,
     };
     final _headers = <String, dynamic>{};

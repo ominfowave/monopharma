@@ -24,14 +24,15 @@ Map<String, dynamic> _$SegmentsListingResponseToJson(
       'data': instance.data,
     };
 
-SegmentData _$DataFromJson(Map<String, dynamic> json) => SegmentData(
+SegmentData _$SegmentDataFromJson(Map<String, dynamic> json) => SegmentData(
       id: (json['id'] as num?)?.toInt(),
       segmentName: json['segment_name'] as String?,
       divisionId: (json['division_id'] as num?)?.toInt(),
       divisionName: json['division_name'] as String?,
     );
 
-Map<String, dynamic> _$DataToJson(SegmentData instance) => <String, dynamic>{
+Map<String, dynamic> _$SegmentDataToJson(SegmentData instance) =>
+    <String, dynamic>{
       'id': instance.id,
       'segment_name': instance.segmentName,
       'division_id': instance.divisionId,

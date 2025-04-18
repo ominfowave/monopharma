@@ -14,8 +14,8 @@ class CustomString{
 
   // ------------------------------- Login ---------------------------------------------
   static String login = "Login"; // Login
-  static String userName = "Username"; // user name
-  static String userNameHint = "Type Your Username"; // user name hint
+
+  static String emailId = "Type Your Email ID"; // user name hint
   static String password = "Password"; // password
   static String passwordHint = "Type Your Password"; // password hint
   static String forgotPassword = "Forgot Password...?"; // password

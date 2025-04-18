@@ -106,14 +106,14 @@ class ApiRepo {
 
   //login
  login(BuildContext context,
-     String fullName,
+     String email,
      String password,
      Function(String) onError,
       Function(dynamic) onSuccess) async {
     // check internet
     if (await Utils.isInternetConnected()) {
       try {
-        LoginResponse loginResponse = await apiClient.login(fullName,password);
+        LoginResponse loginResponse = await apiClient.login(email,password);
         onSuccess(loginResponse);
       } on DioException catch (e) {
         Utils.getErrorApi(e, onError, context);

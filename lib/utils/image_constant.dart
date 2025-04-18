@@ -20,4 +20,6 @@ class ImageConstant{
   static String cartIconProductDetail = "cartIconProductDetail.png";
   static String favoriteIconProductDetail = "favoriteIconProductDetail.png";
   static String shareIconProductDetail = "shareIconProductDetail.png";
+
+
 }

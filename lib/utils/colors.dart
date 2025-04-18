@@ -18,4 +18,6 @@ class CustomColor{
 
   // dashboard
   static const Color greenColor = Color(0xff288407);
+
+
 }

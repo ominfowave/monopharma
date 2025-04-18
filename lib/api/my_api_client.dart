@@ -39,7 +39,7 @@ abstract class MyApiClient {
   // login
   @POST("login")
   Future<LoginResponse> login(
-    @Query("full_name") String fullName,
+    @Query("email") String email,
     @Query("password") String password,
   );
 

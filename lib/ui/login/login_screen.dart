@@ -22,7 +22,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  TextEditingController userNameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -34,7 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void dispose() {
-    userNameController.dispose();
+    emailController.dispose();
     passwordController.dispose();
     super.dispose();
   }
@@ -64,16 +64,16 @@ class _LoginScreenState extends State<LoginScreen> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: TextWrapper(
-                        textShow: CustomString.userName,
+                        textShow: CustomString.email,
                         fontSize: 14,
                         fontWeight: FontWeight.normal,
                         textColor: CustomColor.userNamePassTextColor,
                       ),
                     ),
                     TextFormField(
-                      controller: userNameController,
+                      controller: emailController,
                       decoration: InputDecoration(
-                        hintText: CustomString.userNameHint,
+                        hintText: CustomString.emailId,
                         prefixIcon: const Icon(
                           Icons.person,
                           color: CustomColor.prefixIconColor,
@@ -157,7 +157,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     GestureDetector(
                       onTap: () {
 
-                        if (userNameController.text.isEmpty) {
+                        if (emailController.text.isEmpty) {
                           Utils.showToast('Enter a Username');
                           return;
                         }
@@ -165,7 +165,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           Utils.showToast('Enter a password');
                           return;
                         }
-                          login(userNameController.text, passwordController.text);
+                          login(emailController.text, passwordController.text);
                       },
                       child: Container(
                         width: MediaQuery.of(context).size.width,
@@ -239,7 +239,7 @@ class _LoginScreenState extends State<LoginScreen> {
     // Call the API
     await ApiRepo("", null, baseUrl: MyApiUtils.baseUrl).login(
       context,
-      userNameController.text,
+      emailController.text,
       passwordController.text,
 
           (error) {
