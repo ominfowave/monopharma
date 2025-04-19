@@ -8,7 +8,7 @@ class ProductListingResponse {
   final String? message;
 
   @JsonKey(name: 'data')
-  final List<Data>? data;
+  final List<ProductData>? data;
 
   ProductListingResponse({this.result, this.message, this.data});
 
@@ -19,7 +19,7 @@ class ProductListingResponse {
 }
 
 @JsonSerializable()
-class Data {
+class ProductData {
   final int? id;
 
   @JsonKey(name: 'product_name')
@@ -31,9 +31,9 @@ class Data {
   @JsonKey(name: 'product_price')
   final String? productPrice;
 
-  Data({this.id,this.productName, this.productImage, this.productPrice});
+  ProductData({this.id,this.productName, this.productImage, this.productPrice});
 
-  factory Data.fromJson(Map<String, dynamic> json) => _$DataFromJson(json);
+  factory ProductData.fromJson(Map<String, dynamic> json) => _$ProductDataFromJson(json);
 
-  Map<String, dynamic> toJson() => _$DataToJson(this);
+  Map<String, dynamic> toJson() => _$ProductDataToJson(this);
 }

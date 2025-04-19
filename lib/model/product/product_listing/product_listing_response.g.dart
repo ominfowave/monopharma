@@ -12,7 +12,7 @@ ProductListingResponse _$ProductListingResponseFromJson(
       result: json['result'] as String?,
       message: json['message'] as String?,
       data: (json['data'] as List<dynamic>?)
-          ?.map((e) => Data.fromJson(e as Map<String, dynamic>))
+          ?.map((e) => ProductData.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
@@ -24,14 +24,15 @@ Map<String, dynamic> _$ProductListingResponseToJson(
       'data': instance.data,
     };
 
-Data _$DataFromJson(Map<String, dynamic> json) => Data(
+ProductData _$ProductDataFromJson(Map<String, dynamic> json) => ProductData(
       id: (json['id'] as num?)?.toInt(),
       productName: json['product_name'] as String?,
       productImage: json['product_image'] as String?,
       productPrice: json['product_price'] as String?,
     );
 
-Map<String, dynamic> _$DataToJson(Data instance) => <String, dynamic>{
+Map<String, dynamic> _$ProductDataToJson(ProductData instance) =>
+    <String, dynamic>{
       'id': instance.id,
       'product_name': instance.productName,
       'product_image': instance.productImage,

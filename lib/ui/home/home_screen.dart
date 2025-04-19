@@ -27,24 +27,22 @@ class _HomeScreenState extends State<HomeScreen> {
   SharedPref prefs = SharedPref();
   ProductListingResponse productListingResponse = ProductListingResponse();
   SegmentsListingResponse segmentsListingResponse = SegmentsListingResponse();
-
   SearchProductResponse searchProductResponse = SearchProductResponse();
   TextEditingController divisionController = TextEditingController();
   TextEditingController compositionController = TextEditingController();
-
+  TextEditingController searchController = TextEditingController();
+  List<ProductData> filteredList = [];
   String? currentSelectedSegment;
   SegmentData? selectedSegment;
   String? currentSelectedDivision;
+
 
   @override
   void initState() {
     super.initState();
     fetchProductListing();
     fetchSegment();
-
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +62,6 @@ class _HomeScreenState extends State<HomeScreen> {
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            // Drawer Header
             drawerHeader(),
 
             // list options
@@ -106,6 +103,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   flex: 1,
                   child: TextField(
                     cursorColor: CustomColor.themeColor,
+                    controller: searchController,
+                    onChanged: filterSearch,
                     decoration: InputDecoration(
                         fillColor: Colors.white,
                         filled: true,
@@ -133,97 +132,91 @@ class _HomeScreenState extends State<HomeScreen> {
                           width: 18,
                           child: const Icon(Icons.search),
                         )),
-                    onChanged: (String value) {
-                      /*if (value.isNotEmpty) {
-                        setState(() {
-                          isSearching = true;
-                        });
-                      }
-                      updateSearchQuery(value);*/
-                    },
+                    // onChanged: (String value) {
+                    //   /*if (value.isNotEmpty) {
+                    //     setState(() {
+                    //       isSearching = true;
+                    //     });
+                    //   }
+                    //   updateSearchQuery(value);*/
+                    // },
                   ),
                 ),
                 const SizedBox(
                   width: 10,
                 ),
+                const SizedBox(width: 10),
                 InkWell(
                   onTap: () {
                     showBottomSheetFilter(context);
                   },
-                  child:
-                      Image.asset(Utils.getImagePath(ImageConstant.filterIcon)),
+                  child: Image.asset(Utils.getImagePath(ImageConstant.filterIcon)),
                 )
               ],
             ),
-            const SizedBox(
-              height: 10,
-            ),
+            const SizedBox(height: 10),
             Expanded(
-                child: isLoading? const Center(
-                  child: CircularProgressIndicator(),
-                ): GridView.builder(
-              itemCount: productListingResponse.data!.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              child: isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : GridView.builder(
+                itemCount: filteredList.isNotEmpty ? filteredList.length : productListingResponse.data?.length ?? 0,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   childAspectRatio: 0.87,
-                  crossAxisSpacing: 10),
-              itemBuilder: (context, index) {
-                return InkWell(
-                  onTap: (){
-                    Navigator.pushNamed(context, ProductDetail.routeName,arguments: {"productId" : productListingResponse.data![index].id!});
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                    child: Column(
-                      children: [
-                        Card(
-                          color: Colors.white,
-                          elevation: 5,
-                          shape: const RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20))),
-                          child: Image.network(productListingResponse.data![index].productImage!),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(
-                                  width: MediaQuery.of(context).size.width * 0.3,
-                                  child: TextWrapper(
-                                    textShow:productListingResponse.data![index].productName,
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.bold,
-                                    maxLine: 2,
-                                    overflow: TextOverflow.ellipsis,
+                  crossAxisSpacing: 10,
+                ),
+                itemBuilder: (context, index) {
+                  final product = filteredList.isNotEmpty ? filteredList[index] : productListingResponse.data![index];
+                  return InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(context, ProductDetail.routeName, arguments: {"productId": product.id!});
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                      child: Column(
+                        children: [
+                          Card(
+                            color: Colors.white,
+                            elevation: 5,
+                            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
+                            child: Image.network(product.productImage!),
+                          ),
+                          const SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    width: MediaQuery.of(context).size.width * 0.3,
+                                    child: TextWrapper(
+                                      textShow: product.productName,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.bold,
+                                      maxLine: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                 TextWrapper(
-                                  textShow: "₹ ${productListingResponse.data![index].productPrice}",
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  textColor: CustomColor.greenColor,
-                                ),
-                              ],
-                            ),
-                            Image.asset(
-                                Utils.getImagePath(ImageConstant.cartIcon))
-                          ],
-                        ),
-                      ],
+                                  const SizedBox(height: 5),
+                                  TextWrapper(
+                                    textShow: "₹ ${product.productPrice}",
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    textColor: CustomColor.greenColor,
+                                  ),
+                                ],
+                              ),
+                              Image.asset(Utils.getImagePath(ImageConstant.cartIcon)),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              },
-            ))
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),
@@ -232,48 +225,39 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget drawerHeader() {
     return DrawerHeader(
-        padding: EdgeInsets.zero,
-        child: Container(
-          padding: const EdgeInsets.only(left: 15, bottom: 15),
-          decoration: BoxDecoration(
-              color: CustomColor.themeColor,
-              borderRadius: BorderRadius.circular(15)),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Image.asset(Utils.getImagePath(ImageConstant.drawerPersonIcon)),
-              const SizedBox(
-                height: 10,
-              ),
-              const TextWrapper(
-                textShow: "Dhruvit Jikadra",
-                textColor: Colors.white,
-                fontSize: 25,
-                fontWeight: FontWeight.bold,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              const TextWrapper(
-                textShow: "jikadradhruvit.jd@gmail.com",
-                textColor: Colors.white,
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-              )
-            ],
-          ),
-        ));
+      padding: EdgeInsets.zero,
+      child: Container(
+        padding: const EdgeInsets.only(left: 15, bottom: 15),
+        decoration: BoxDecoration(color: CustomColor.themeColor, borderRadius: BorderRadius.circular(15)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Image.asset(Utils.getImagePath(ImageConstant.drawerPersonIcon)),
+            const SizedBox(height: 10),
+            const TextWrapper(
+              textShow: "Dhruvit Jikadra",
+              textColor: Colors.white,
+              fontSize: 25,
+              fontWeight: FontWeight.bold,
+            ),
+            const SizedBox(height: 10),
+            const TextWrapper(
+              textShow: "jikadradhruvit.jd@gmail.com",
+              textColor: Colors.white,
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
-  Widget listTileOption(bool isLeading, Color textColor, String? imagePath,
-      String message, double fontSize, VoidCallback onTap, Color bgColor) {
+  Widget listTileOption(bool isLeading, Color textColor, String? imagePath, String message, double fontSize, VoidCallback onTap, Color bgColor) {
     return ListTile(
       onTap: onTap,
-      leading: Image.asset(
-        Utils.getImagePath(imagePath!),
-        color: CustomColor.themeColor,
-      ),
+      leading: Image.asset(Utils.getImagePath(imagePath!), color: CustomColor.themeColor),
       title: TextWrapper(
         textShow: message,
         textColor: textColor,
@@ -289,22 +273,19 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: Colors.white,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(25), topRight: Radius.circular(25)),
+        borderRadius: BorderRadius.only(topLeft: Radius.circular(25), topRight: Radius.circular(25)),
       ),
       builder: (BuildContext context) {
         return Wrap(
           children: [
             Container(
               padding: const EdgeInsets.all(20),
-              child:
-              isLoading
+              child: isLoading
                   ? const Center(child: CircularProgressIndicator())
-                  :
-              Column(
+                  : Column(
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       TextWrapper(
                         textShow: CustomString.filters,
@@ -319,7 +300,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 20,),
+                  const SizedBox(height: 20),
                   InputDecorator(
                     decoration: InputDecoration(
                       labelStyle: GoogleFonts.poppins(color: CustomColor.themeColor, fontSize: 16.0),
@@ -342,13 +323,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         onChanged: (String? newValue) {
                           setState(() {
                             currentSelectedSegment = newValue;
-
-                            // Find the corresponding division name based on the selected segment
                             selectedSegment = segmentsListingResponse.data?.firstWhere(
                                   (segment) => segment.segmentName == currentSelectedSegment,
                             );
-
-                            // Update the division controller with the division name
                             divisionController.text = selectedSegment?.divisionName ?? '';
                           });
                         },
@@ -361,7 +338,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20,),
+                  const SizedBox(height: 20),
                   TextField(
                     controller: divisionController,
                     decoration: InputDecoration(
@@ -380,7 +357,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20,),
+                  const SizedBox(height: 20),
                   TextField(
                     controller: compositionController,
                     decoration: InputDecoration(
@@ -399,37 +376,38 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 30,),
+                  const SizedBox(height: 30),
                   InkWell(
                     onTap: () {
-
-                  if(selectedSegment != null && compositionController.text.isNotEmpty){
-                    int? segmentId  =  selectedSegment?.id;
-
-                    if(segmentId != null){
-                      fetchSearchProduct(segmentId, compositionController.text);
-                      Navigator.pop(context);
-                    }
-                  }
+                      if (selectedSegment != null && compositionController.text.isNotEmpty) {
+                        int? segmentId = selectedSegment?.id;
+                        if (segmentId != null) {
+                          fetchSearchProduct(segmentId, compositionController.text);
+                          Navigator.pop(context);
+                        }
+                      }
                     },
                     child: Container(
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
-                          color: CustomColor.themeColor,
-                          borderRadius: BorderRadius.circular(50)),
+                        color: CustomColor.themeColor,
+                        borderRadius: BorderRadius.circular(50),
+                      ),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 12.0),
                         child: Center(
-                            child: TextWrapper(
-                              textShow: CustomString.search,
-                              height: 0,
-                              textColor: CustomColor.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
-                            )),
+                          child: TextWrapper(
+                            textShow: CustomString.search,
+                            height: 0,
+                            textColor: CustomColor.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                        ),
                       ),
                     ),
                   ),
+
                 ],
               ),
             ),
@@ -439,14 +417,13 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  //product listing api call
   Future<void> fetchProductListing() async {
     setState(() {
       isLoading = true;
     });
     try {
       String? token = await prefs.getToken();
-      ApiRepo(token,null, baseUrl: MyApiUtils.baseUrl).productListing(
+      ApiRepo(token, null, baseUrl: MyApiUtils.baseUrl).productListing(
         context,
             (error) {
           setState(() {
@@ -458,6 +435,7 @@ class _HomeScreenState extends State<HomeScreen> {
             (response) {
           setState(() {
             productListingResponse = response;
+            filteredList = productListingResponse.data ?? [];
             isLoading = false;
           });
         },
@@ -499,7 +477,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Future<void> fetchSearchProduct(int segmentId, String? composition,) async {
+  Future<void> fetchSearchProduct(int segmentId, String? composition) async {
     setState(() {
       isLoading = true;
     });
@@ -518,6 +496,7 @@ class _HomeScreenState extends State<HomeScreen> {
             (response) {
           setState(() {
             searchProductResponse = response;
+            filteredList = response.data ?? [];
             isLoading = false;
           });
         },
@@ -526,7 +505,20 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         isLoading = false;
       });
-      print("Error fetching segment list: $error");
+      print("Error fetching search product: $error");
+    }
+  }
+
+  void filterSearch(String query) {
+    final allItems = productListingResponse.data ?? [];
+    if (query.isEmpty) {
+      setState(() {
+        filteredList = allItems;
+      });
+    } else {
+      setState(() {
+        filteredList = allItems.where((item) => item.productName?.toLowerCase().contains(query.toLowerCase()) ?? false).toList();
+      });
     }
   }
 }
