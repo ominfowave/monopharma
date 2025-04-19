@@ -10,6 +10,9 @@ import 'package:mono/widgets/text_widget.dart';
 import '../../Api/api_repo.dart';
 import '../../Api/my_api_utils.dart';
 import '../../model/register/register_response.dart';
+
+import '../../model/state list/state_list_response.dart';
+import '../../utils/shared_preference.dart';
 import '../dashboard/dashboard_screen.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -32,14 +35,23 @@ class _SignupScreenState extends State<SignupScreen> {
   TextEditingController city = TextEditingController();
   TextEditingController address = TextEditingController();
   TextEditingController pinCode = TextEditingController();
-
+  SharedPref prefs = SharedPref();
   RegisterResponse registerResponse = RegisterResponse();
-
   int? _selectedValue = 0;
-
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  var states = ["Gujarat", "Maharashtra"];
-  String currentSelectedValue = "Gujarat";
+
+  StateListResponse stateListResponse = StateListResponse();
+  String? currentSelectedState;
+  StateData? selectedState;
+  List<String> states = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchStateList();
+
+  }
+
 
   bool isLoading = false;
 
@@ -236,37 +248,45 @@ class _SignupScreenState extends State<SignupScreen> {
                       const SizedBox(height: 15),
                       InputDecorator(
                         decoration: InputDecoration(
-                          labelStyle: GoogleFonts.poppins(
-                              color: CustomColor.themeColor, fontSize: 16.0),
-                          errorStyle: GoogleFonts.poppins(
-                              color: CustomColor.themeColor, fontSize: 16.0),
-                          hintText: 'Please select State',
+                          labelStyle: GoogleFonts.poppins(color: CustomColor.themeColor, fontSize: 16.0),
+                          errorStyle: GoogleFonts.poppins(color: CustomColor.themeColor, fontSize: 16.0),
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
-                            borderSide: const BorderSide(
-                                color: CustomColor.prefixIconColor),
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30),
+                            borderSide: const BorderSide(color: Colors.grey),
                           ),
                         ),
-                        isEmpty: currentSelectedValue == '',
+                        isEmpty: currentSelectedState == null,
                         child: DropdownButtonHideUnderline(
                           child: DropdownButton<String>(
                             dropdownColor: CustomColor.white,
-                            value: currentSelectedValue,
+                            value: currentSelectedState,
                             isDense: true,
+                            hint: Text('Please select state', style: GoogleFonts.poppins()),
                             onChanged: (String? newValue) {
                               setState(() {
-                                currentSelectedValue = newValue!;
+                                currentSelectedState = newValue;
+
+                                // Find the corresponding division name based on the selected segment
+                                selectedState = stateListResponse.data?.firstWhere(
+                                      (state) => state.stateName == currentSelectedState,
+                                );
+
+
                               });
                             },
-                            items: states.map((String value) {
+                            items: (stateListResponse.data ?? []).map((state) {
                               return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
+                                value: state.stateName,
+                                child: Text(state.stateName ?? '', style: GoogleFonts.poppins(fontSize: 14)),
                               );
                             }).toList(),
                           ),
                         ),
                       ),
+
                       const SizedBox(height: 15),
                       TextFieldWrapper(
                         textEditingController: city,
@@ -512,7 +532,7 @@ class _SignupScreenState extends State<SignupScreen> {
       String password,
       String cPassword,
       ) async {
-    int stateId = states.indexOf(currentSelectedValue);
+    int stateId = selectedState?.id ?? 0;
     int role = _selectedValue ?? 0;
 
     setState(() {
@@ -558,4 +578,34 @@ class _SignupScreenState extends State<SignupScreen> {
       },
     );
   }
+  Future<void> fetchStateList() async {
+    setState(() {
+      isLoading = true;
+    });
+    try {
+      String? token = await prefs.getToken();
+      ApiRepo(token, null, baseUrl: MyApiUtils.baseUrl).state(
+        context,
+            (error) {
+          setState(() {
+            isLoading = false;
+          });
+          Utils.showToast("Server Error: $error");
+        },
+            (response) {
+          setState(() {
+            stateListResponse = response;
+            isLoading = false;
+          });
+        },
+      );
+    } catch (error) {
+      setState(() {
+        isLoading = false;
+      });
+      print("Error fetching state list: $error");
+    }
+  }
+
+
 }

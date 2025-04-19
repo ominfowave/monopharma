@@ -10,6 +10,8 @@ import '../model/product/search product/search_product_response.dart';
 import '../model/product/user all pdf/user_all_pdf_response.dart';
 import '../model/register/register_response.dart';
 import '../model/segments/segments_listing/segments_listing_response.dart';
+
+import '../model/state list/state_list_response.dart';
 import '../utils/utils.dart';
 import '../model/product/product view/product_view_response.dart';
 import 'my_api_client.dart';
@@ -218,5 +220,27 @@ class ApiRepo {
       onError("Please check your internet connection and try again.");
     }
   }
+
+  //state list
+   state(
+      BuildContext context,
+      Function(String) onError,
+      Function(dynamic) onSuccess,
+      ) async {
+    if (await Utils.isInternetConnected()) {
+      try {
+        StateListResponse stateListResponse = await apiClient.state();
+        onSuccess(stateListResponse);
+      } on DioException catch (e) {
+        Utils.getErrorApi(e, onError, context);
+      }
+    } else {
+      onError("Please check your internet connection and try again.");
+    }
+  }
+
+
+
+
 
 }

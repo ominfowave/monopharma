@@ -12,6 +12,8 @@ import '../model/product/search product/search_product_response.dart';
 import '../model/product/user all pdf/user_all_pdf_response.dart';
 import '../model/register/register_response.dart';
 import '../model/segments/segments_listing/segments_listing_response.dart';
+
+import '../model/state list/state_list_response.dart';
 import 'my_api_utils.dart';
 
 part 'my_api_client.g.dart';
@@ -73,4 +75,11 @@ abstract class MyApiClient {
   // user all pdf
   @GET("product-pdf")
   Future<UserAllPdfResponse> userAllPdf();
+
+  // state list
+  @GET("states")
+  Future<StateListResponse> state();
+
+
+
 }
