@@ -51,6 +51,12 @@ class CustomString{
   static String errorEmptyCity = "Please enter City name";
   static String errorPinCode = "Please enter Pin code";
   static String errorSamePassword = "Password and Confirm Password must be same";
+  static String gstNumber = "Gst Number";
+  static String errorEmptyGstNumber = "Please enter Gst Number";
+  static String panNumber = "PAN Number";
+  static String errorEmptyPanNumber = "Please enter Pan Number";
+  static String drivingLicence = "Driving Licence";
+  static String errorEmptyDrivingLicence = "Please enter Driving Licence";
 
 // ------------------------------- Dashboard ---------------------------------------------
   static String order = "Order";

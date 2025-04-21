@@ -139,6 +139,9 @@ class ApiRepo {
       int role,
       String password,
       String cPassword,
+      String gstNo,
+      String dlNo,
+      String pancardNo,
       Function(String) onError,
       Function(dynamic) onSuccess) async {
     // check internet
@@ -155,7 +158,12 @@ class ApiRepo {
            pincode,
            role,
            password,
-           cPassword,);
+           cPassword,
+            gstNo,
+            dlNo,
+            pancardNo,
+
+        );
         onSuccess(registerResponse);
       } on DioException catch (e) {
         Utils.getErrorApi(e, onError, context);

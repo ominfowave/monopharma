@@ -208,6 +208,9 @@ class _MyApiClient implements MyApiClient {
     int role,
     String password,
     String cPassword,
+    String gstNo,
+    String dlNo,
+    String pancardNo,
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
@@ -223,6 +226,9 @@ class _MyApiClient implements MyApiClient {
       r'role': role,
       r'password': password,
       r'c_password': cPassword,
+      r'gst_no': gstNo,
+      r'dl_no': dlNo,
+      r'pancard_no': pancardNo,
     };
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;

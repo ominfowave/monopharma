@@ -60,6 +60,9 @@ abstract class MyApiClient {
     @Query("role") int role,
     @Query("password") String password,
     @Query("c_password") String cPassword,
+      @Query("gst_no") String gstNo,
+      @Query("dl_no") String dlNo,
+      @Query("pancard_no") String pancardNo,
   );
 
   // search product

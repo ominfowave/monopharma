@@ -10,7 +10,7 @@ import 'package:mono/widgets/text_widget.dart';
 import '../../Api/api_repo.dart';
 import '../../Api/my_api_utils.dart';
 import '../../model/register/register_response.dart';
-
+import 'package:intl/intl.dart';
 import '../../model/state list/state_list_response.dart';
 import '../../utils/shared_preference.dart';
 import '../dashboard/dashboard_screen.dart';
@@ -35,6 +35,9 @@ class _SignupScreenState extends State<SignupScreen> {
   TextEditingController city = TextEditingController();
   TextEditingController address = TextEditingController();
   TextEditingController pinCode = TextEditingController();
+  TextEditingController gst = TextEditingController();
+  TextEditingController pan = TextEditingController();
+  TextEditingController drivinglicence = TextEditingController();
   SharedPref prefs = SharedPref();
   RegisterResponse registerResponse = RegisterResponse();
   int? _selectedValue = 0;
@@ -48,9 +51,9 @@ class _SignupScreenState extends State<SignupScreen> {
   @override
   void initState() {
     super.initState();
-    fetchStateList();
-
+    fetchStateList(); // Make sure this is being called
   }
+
 
 
   bool isLoading = false;
@@ -63,7 +66,9 @@ class _SignupScreenState extends State<SignupScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Form(
           key: _formKey,
-          child: Column(
+          child: isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const SizedBox(height: 70),
@@ -180,7 +185,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       const SizedBox(height: 15),
                       TextFieldWrapper(
                         textEditingController: birthDate,
-                        readOnly: false,
+                        readOnly: true,
                         isValidate: true,
                         isLabel: true,
                         fontSize: 15,
@@ -190,8 +195,26 @@ class _SignupScreenState extends State<SignupScreen> {
                         inputBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
                           borderSide: const BorderSide(
-                              color: CustomColor.prefixIconColor),
+                            color: CustomColor.prefixIconColor,
+                          ),
                         ),
+                        suffixIcon: Icon(
+                          Icons.calendar_today,
+                          color: CustomColor.themeColor,
+                        ),
+                        onTap: () async {
+                          DateTime? pickedDate = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(1900),
+                            lastDate: DateTime.now(),
+                          );
+
+                          if (pickedDate != null) {
+                            String formattedDate = DateFormat('yyyy/MM/dd').format(pickedDate);
+                            birthDate.text = formattedDate;
+                          }
+                        },
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return CustomString.errorEmptyBirthDate;
@@ -199,6 +222,12 @@ class _SignupScreenState extends State<SignupScreen> {
                           return null;
                         },
                       ),
+
+
+
+
+
+
                       const SizedBox(height: 15),
                       TextFieldWrapper(
                         textEditingController: password,
@@ -251,10 +280,10 @@ class _SignupScreenState extends State<SignupScreen> {
                           labelStyle: GoogleFonts.poppins(color: CustomColor.themeColor, fontSize: 16.0),
                           errorStyle: GoogleFonts.poppins(color: CustomColor.themeColor, fontSize: 16.0),
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30),
+                            borderRadius: BorderRadius.circular(15),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30),
+                            borderRadius: BorderRadius.circular(15),
                             borderSide: const BorderSide(color: Colors.grey),
                           ),
                         ),
@@ -269,12 +298,11 @@ class _SignupScreenState extends State<SignupScreen> {
                               setState(() {
                                 currentSelectedState = newValue;
 
-                                // Find the corresponding division name based on the selected segment
+                                // Find the full state object
                                 selectedState = stateListResponse.data?.firstWhere(
                                       (state) => state.stateName == currentSelectedState,
+                                  orElse: () => StateData(), // Fallback if not found
                                 );
-
-
                               });
                             },
                             items: (stateListResponse.data ?? []).map((state) {
@@ -286,6 +314,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           ),
                         ),
                       ),
+
 
                       const SizedBox(height: 15),
                       TextFieldWrapper(
@@ -354,6 +383,80 @@ class _SignupScreenState extends State<SignupScreen> {
                           return null;
                         },
                       ),
+                      const SizedBox(height: 15),
+                      TextFieldWrapper(
+                        textEditingController: gst,
+                        readOnly: false,
+                        isLabel: true,
+                        isValidate: true,
+                        fontSize: 15,
+                        maxLength: 15, // Updated here
+                        hintText: CustomString.gstNumber,
+                        hintColor: CustomColor.prefixIconColor,
+                        inputBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: const BorderSide(
+                            color: CustomColor.prefixIconColor,
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return CustomString.errorEmptyGstNumber;
+                          }
+                          return null;
+                        },
+                      ),
+
+
+                      const SizedBox(height: 15),
+                      TextFieldWrapper(
+                        textEditingController: pan,
+                        readOnly: false,
+                        isLabel: true,
+                        isValidate: true,
+                        fontSize: 15,
+                        maxLength: 9, // Updated here
+                        hintText: CustomString.panNumber,
+                        hintColor: CustomColor.prefixIconColor,
+                        inputBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: const BorderSide(
+                            color: CustomColor.prefixIconColor,
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return CustomString.errorEmptyPanNumber;
+                          }
+                          return null;
+                        },
+                      ),
+
+                      const SizedBox(height: 15),
+                      TextFieldWrapper(
+                        textEditingController: drivinglicence,
+                        readOnly: false,
+                        isLabel: true,
+                        isValidate: true,
+                        fontSize: 15,
+                        maxLength: 16, // Updated here
+                        hintText: CustomString.drivingLicence,
+                        hintColor: CustomColor.prefixIconColor,
+                        inputBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: const BorderSide(
+                            color: CustomColor.prefixIconColor,
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return CustomString.errorEmptyDrivingLicence;
+                          }
+                          return null;
+                        },
+                      ),
+
+
                       Column(
                         children: [
                           SizedBox(
@@ -362,8 +465,8 @@ class _SignupScreenState extends State<SignupScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              addRadioButton(0, 'Seller'),
-                              addRadioButton(1, 'Distributor'),
+                              addRadioButton(1, 'Seller'),
+                              addRadioButton(2, 'Distributor'),
                             ],
                           ),
                         ],
@@ -411,6 +514,18 @@ class _SignupScreenState extends State<SignupScreen> {
                             Utils.showToast('Enter a confirmPassword');
                             return;
                           }
+                          if (gst.text.isEmpty) {
+                            Utils.showToast('Enter a gstNumber');
+                            return;
+                          }
+                          if (pan.text.isEmpty) {
+                            Utils.showToast('Enter a panNumber');
+                            return;
+                          }
+                          if (drivinglicence.text.isEmpty) {
+                            Utils.showToast('Enter a drivingLicence');
+                            return;
+                          }
 
 
                           register(
@@ -424,6 +539,10 @@ class _SignupScreenState extends State<SignupScreen> {
                             pinCode.text,
                             password.text,
                             confirmPassword.text,
+                            gst.text,
+                            pan.text,
+                            drivinglicence.text,
+
 
                           );
                         },
@@ -531,6 +650,9 @@ class _SignupScreenState extends State<SignupScreen> {
       String pincode,
       String password,
       String cPassword,
+      String gstNumber,
+      String panNumber,
+      String drivingLicence,
       ) async {
     int stateId = selectedState?.id ?? 0;
     int role = _selectedValue ?? 0;
@@ -554,8 +676,12 @@ class _SignupScreenState extends State<SignupScreen> {
       role,
       password,
       cPassword,
+      gstNumber,
+      panNumber,
+      drivingLicence,
           (error) {
         setState(() {
+
           isLoading = false;
         });
         print('API Error:$error');
@@ -583,8 +709,8 @@ class _SignupScreenState extends State<SignupScreen> {
       isLoading = true;
     });
     try {
-      String? token = await prefs.getToken();
-      ApiRepo(token, null, baseUrl: MyApiUtils.baseUrl).state(
+
+      ApiRepo("", null, baseUrl: MyApiUtils.baseUrl).state(
         context,
             (error) {
           setState(() {

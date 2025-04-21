@@ -4,9 +4,9 @@ part 'register_response.g.dart';
 
 @JsonSerializable()
 class RegisterResponse {
-  final String? result;
-  final String? message;
-  final Data? data;
+  String? result;
+  String? message;
+  Data? data;
 
   RegisterResponse({this.result, this.message, this.data});
 
@@ -18,8 +18,8 @@ class RegisterResponse {
 
 @JsonSerializable()
 class Data {
-  final String? token;
-  final User? user;
+  String? token;
+  User? user;
 
   Data({this.token, this.user});
 
@@ -31,34 +31,43 @@ class Data {
 @JsonSerializable()
 class User {
   @JsonKey(name: 'firm_name')
-  final String? firmName;
+  String? firmName;
 
   @JsonKey(name: 'full_name')
-  final String? fullName;
+  String? fullName;
 
-  final String? email;
+  String? email;
 
   @JsonKey(name: 'whatsapp_no')
-  final String? whatsappNo;
+  String? whatsappNo;
 
   @JsonKey(name: 'birth_date')
-  final String? birthDate;
+  String? birthDate;
 
   @JsonKey(name: 'state_id')
-  final String? stateId;
+  String? stateId;
 
-  final String? city;
-  final String? address;
-  final String? pincode;
-  final String? role;
+  String? city;
+  String? address;
+  String? pincode;
+  String? role;
+
+  @JsonKey(name: 'gst_no')
+  String? gstNo;
+
+  @JsonKey(name: 'dl_no')
+  String? dlNo;
+
+  @JsonKey(name: 'pancard_no')
+  String? pancardNo;
 
   @JsonKey(name: 'updated_at')
-  final String? updatedAt;
+  String? updatedAt;
 
   @JsonKey(name: 'created_at')
-  final String? createdAt;
+  String? createdAt;
 
-  final int? id;
+  int? id;
 
   User({
     this.firmName,
@@ -71,6 +80,9 @@ class User {
     this.address,
     this.pincode,
     this.role,
+    this.gstNo,
+    this.dlNo,
+    this.pancardNo,
     this.updatedAt,
     this.createdAt,
     this.id,
