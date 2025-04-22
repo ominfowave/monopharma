@@ -13,7 +13,6 @@ import '../../model/register/register_response.dart';
 import 'package:intl/intl.dart';
 import '../../model/state list/state_list_response.dart';
 import '../../utils/shared_preference.dart';
-import '../dashboard/dashboard_screen.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -57,6 +56,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
 
   bool isLoading = false;
+  bool isLoadingState = true;
 
   @override
   Widget build(BuildContext context) {
@@ -64,11 +64,9 @@ class _SignupScreenState extends State<SignupScreen> {
       body: Container(
         decoration: Utils.getDecorationBg(),
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Form(
+        child:isLoadingState ? const Center(child: CircularProgressIndicator(color: CustomColor.themeColor,),) : Form(
           key: _formKey,
-          child: isLoading
-              ? const Center(child: CircularProgressIndicator())
-              : Column(
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const SizedBox(height: 70),
@@ -198,18 +196,32 @@ class _SignupScreenState extends State<SignupScreen> {
                             color: CustomColor.prefixIconColor,
                           ),
                         ),
-                        suffixIcon: Icon(
+                        suffixIcon: const Icon(
                           Icons.calendar_today,
                           color: CustomColor.themeColor,
                         ),
                         onTap: () async {
                           DateTime? pickedDate = await showDatePicker(
+                            builder: (context, child) {
+                              return Theme(
+                                  data: Theme.of(context).copyWith(
+                                colorScheme: ColorScheme.light(
+                                  primary: CustomColor.themeColor.withOpacity(0.6), // header background color
+                                  onPrimary: Colors.black, // header text color
+                                  onSurface: CustomColor.themeColor, // body text color
+                                ),
+                                textButtonTheme: TextButtonThemeData(
+                                  style: TextButton.styleFrom(
+                                    foregroundColor: Colors.red, // button text color
+                                  ),
+                                ),
+                              ), child: child!, );
+                            },
                             context: context,
                             initialDate: DateTime.now(),
                             firstDate: DateTime(1900),
                             lastDate: DateTime.now(),
                           );
-
                           if (pickedDate != null) {
                             String formattedDate = DateFormat('yyyy/MM/dd').format(pickedDate);
                             birthDate.text = formattedDate;
@@ -222,12 +234,6 @@ class _SignupScreenState extends State<SignupScreen> {
                           return null;
                         },
                       ),
-
-
-
-
-
-
                       const SizedBox(height: 15),
                       TextFieldWrapper(
                         textEditingController: password,
@@ -281,6 +287,8 @@ class _SignupScreenState extends State<SignupScreen> {
                           errorStyle: GoogleFonts.poppins(color: CustomColor.themeColor, fontSize: 16.0),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
+                            borderSide: const BorderSide(
+                                color: CustomColor.prefixIconColor),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
@@ -459,7 +467,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
                       Column(
                         children: [
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                           Row(
@@ -542,8 +550,6 @@ class _SignupScreenState extends State<SignupScreen> {
                             gst.text,
                             pan.text,
                             drivinglicence.text,
-
-
                           );
                         },
                         child: Container(
@@ -554,7 +560,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 11.0),
                             child: Center(
-                              child: TextWrapper(
+                              child: isLoading ? const CircularProgressIndicator(color: Colors.white,) : TextWrapper(
                                 textShow: CustomString.signUp,
                                 height: 0,
                                 textColor: CustomColor.white,
@@ -706,7 +712,7 @@ class _SignupScreenState extends State<SignupScreen> {
   }
   Future<void> fetchStateList() async {
     setState(() {
-      isLoading = true;
+      isLoadingState = true;
     });
     try {
 
@@ -714,20 +720,20 @@ class _SignupScreenState extends State<SignupScreen> {
         context,
             (error) {
           setState(() {
-            isLoading = false;
+            isLoadingState = false;
           });
           Utils.showToast("Server Error: $error");
         },
             (response) {
           setState(() {
             stateListResponse = response;
-            isLoading = false;
+            isLoadingState = false;
           });
         },
       );
     } catch (error) {
       setState(() {
-        isLoading = false;
+        isLoadingState = false;
       });
       print("Error fetching state list: $error");
     }

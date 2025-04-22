@@ -83,6 +83,4 @@ abstract class MyApiClient {
   @GET("states")
   Future<StateListResponse> state();
 
-
-
 }

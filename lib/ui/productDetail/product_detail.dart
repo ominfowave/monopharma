@@ -55,20 +55,17 @@ class _ProductDetailState extends State<ProductDetail> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Card(
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(20))),
-                  elevation: 10,
+              Card(
+               color: Colors.white,
+                elevation: 5,
+                child: Center(
                   child: Image.network(
                       productViewResponse.data!.productImage!,
-                    width: 280.0,
                     height: 250.0,
-                    fit: BoxFit.cover,
+                    fit: BoxFit.fill,
 
-                  )),
-              ),
+                  ),
+                )),
               const SizedBox(
                 height: 20,
               ),
@@ -126,6 +123,7 @@ class _ProductDetailState extends State<ProductDetail> {
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -139,10 +137,15 @@ class _ProductDetailState extends State<ProductDetail> {
                         fontSize: 14,
                       ),
                       const SizedBox(height: 5),
-                      TextWrapper(
-                        textShow: productViewResponse.data!.categoryName ?? '',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16,
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.45,
+                        child: TextWrapper(
+                          textShow: productViewResponse.data!.categoryName ?? '',
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16,
+                          overflow: TextOverflow.ellipsis,
+                          maxLine: 2,
+                        ),
                       ),
                     ],
                   ),
@@ -158,11 +161,15 @@ class _ProductDetailState extends State<ProductDetail> {
                         fontSize: 14,
                       ),
                       const SizedBox(height: 5),
-                       TextWrapper(
-                        textShow: productViewResponse.data!.divisionName ?? '',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16,
-                      ),
+                       SizedBox(
+                         width: MediaQuery.of(context).size.width * 0.45,
+                         child: TextWrapper(
+                          textShow: productViewResponse.data!.divisionName ?? '',
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16,
+                           maxLine: 2,
+                           overflow: TextOverflow.ellipsis,),
+                       ),
                     ],
                   )
                 ],

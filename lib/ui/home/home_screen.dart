@@ -7,6 +7,7 @@ import 'package:mono/widgets/text_widget.dart';
 
 import '../../Api/api_repo.dart';
 import '../../Api/my_api_utils.dart';
+import '../../model/login/login_response.dart';
 import '../../model/product/product_listing/product_listing_response.dart';
 import '../../model/product/search product/search_product_response.dart';
 import '../../model/segments/segments_listing/segments_listing_response.dart';
@@ -25,7 +26,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   bool isLoading = true;
   SharedPref prefs = SharedPref();
-  ProductListingResponse productListingResponse = ProductListingResponse();
+  List<ProductData> productListingResponse = [];
   SegmentsListingResponse segmentsListingResponse = SegmentsListingResponse();
   SearchProductResponse searchProductResponse = SearchProductResponse();
   TextEditingController divisionController = TextEditingController();
@@ -35,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String? currentSelectedSegment;
   SegmentData? selectedSegment;
   String? currentSelectedDivision;
-
+  LoginResponse? loginResponse;
 
   @override
   void initState() {
@@ -132,25 +133,22 @@ class _HomeScreenState extends State<HomeScreen> {
                           width: 18,
                           child: const Icon(Icons.search),
                         )),
-                    // onChanged: (String value) {
-                    //   /*if (value.isNotEmpty) {
-                    //     setState(() {
-                    //       isSearching = true;
-                    //     });
-                    //   }
-                    //   updateSearchQuery(value);*/
-                    // },
                   ),
                 ),
                 const SizedBox(
                   width: 10,
                 ),
-                const SizedBox(width: 10),
+                const SizedBox(width: 5),
                 InkWell(
-                  onTap: () {
-                    showBottomSheetFilter(context);
+                  onTap: () async{
+                    if(searchProductResponse.data!= null) {
+                      searchProductResponse = SearchProductResponse();
+                      await fetchProductListing();
+                    }else{
+                      showBottomSheetFilter(context);
+                    }
                   },
-                  child: Image.asset(Utils.getImagePath(ImageConstant.filterIcon)),
+                  child: searchProductResponse.data!= null ? const Icon(Icons.filter_alt_outlined,color: CustomColor.themeColor,size: 40,)  : Image.asset(Utils.getImagePath(ImageConstant.filterIcon)),
                 )
               ],
             ),
@@ -159,14 +157,14 @@ class _HomeScreenState extends State<HomeScreen> {
               child: isLoading
                   ? const Center(child: CircularProgressIndicator())
                   : GridView.builder(
-                itemCount: filteredList.isNotEmpty ? filteredList.length : productListingResponse.data?.length ?? 0,
+                itemCount: filteredList.isNotEmpty ? filteredList.length : productListingResponse.length ?? 0,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   childAspectRatio: 0.87,
                   crossAxisSpacing: 10,
                 ),
                 itemBuilder: (context, index) {
-                  final product = filteredList.isNotEmpty ? filteredList[index] : productListingResponse.data![index];
+                  final product = filteredList.isNotEmpty ? filteredList[index] : productListingResponse[index];
                   return InkWell(
                     onTap: () {
                       Navigator.pushNamed(context, ProductDetail.routeName, arguments: {"productId": product.id!});
@@ -178,8 +176,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           Card(
                             color: Colors.white,
                             elevation: 5,
-                            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
-                            child: Image.network(product.productImage!),
+                            child: Image.network(product.productImage!,height: MediaQuery.of(context).size.height * 0.17,width: MediaQuery.of(context).size.width * 0.45,),
                           ),
                           const SizedBox(height: 10),
                           Row(
@@ -235,15 +232,15 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Image.asset(Utils.getImagePath(ImageConstant.drawerPersonIcon)),
             const SizedBox(height: 10),
-            const TextWrapper(
-              textShow: "Dhruvit Jikadra",
+            TextWrapper(
+              textShow: loginResponse?.data?.user?.fullName ?? "",
               textColor: Colors.white,
               fontSize: 25,
               fontWeight: FontWeight.bold,
             ),
             const SizedBox(height: 10),
-            const TextWrapper(
-              textShow: "jikadradhruvit.jd@gmail.com",
+            TextWrapper(
+              textShow: loginResponse?.data?.user?.email ?? "",
               textColor: Colors.white,
               fontSize: 14,
               fontWeight: FontWeight.w600,
@@ -276,145 +273,174 @@ class _HomeScreenState extends State<HomeScreen> {
         borderRadius: BorderRadius.only(topLeft: Radius.circular(25), topRight: Radius.circular(25)),
       ),
       builder: (BuildContext context) {
-        return Wrap(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(20),
-              child: isLoading
-                  ? const Center(child: CircularProgressIndicator())
-                  : Column(
+        return StatefulBuilder(
+          builder: (context,state) {
+            return Padding(
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom),
+              child: Wrap(
                 children: [
-                  Row(
-                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      TextWrapper(
-                        textShow: CustomString.filters,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      TextWrapper(
-                        textShow: CustomString.clear,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        textColor: CustomColor.themeColor,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  InputDecorator(
-                    decoration: InputDecoration(
-                      labelStyle: GoogleFonts.poppins(color: CustomColor.themeColor, fontSize: 16.0),
-                      errorStyle: GoogleFonts.poppins(color: CustomColor.themeColor, fontSize: 16.0),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30),
-                        borderSide: const BorderSide(color: Colors.grey),
-                      ),
-                    ),
-                    isEmpty: currentSelectedSegment == null,
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<String>(
-                        dropdownColor: CustomColor.white,
-                        value: currentSelectedSegment,
-                        isDense: true,
-                        hint: Text('Please select Segment', style: GoogleFonts.poppins()),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            currentSelectedSegment = newValue;
-                            selectedSegment = segmentsListingResponse.data?.firstWhere(
-                                  (segment) => segment.segmentName == currentSelectedSegment,
-                            );
-                            divisionController.text = selectedSegment?.divisionName ?? '';
-                          });
-                        },
-                        items: (segmentsListingResponse.data ?? []).map((segment) {
-                          return DropdownMenuItem<String>(
-                            value: segment.segmentName,
-                            child: Text(segment.segmentName ?? '', style: GoogleFonts.poppins(fontSize: 14)),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  TextField(
-                    controller: divisionController,
-                    decoration: InputDecoration(
-                      hintText: 'Select a Division',
-                      enabled: false,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30),
-                        borderSide: const BorderSide(color: Colors.grey),
-                      ),
-                      disabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30),
-                        borderSide: const BorderSide(color: Colors.grey),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  TextField(
-                    controller: compositionController,
-                    decoration: InputDecoration(
-                      hintText: 'Select a Composition',
-                      enabled: true,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30),
-                        borderSide: const BorderSide(color: Colors.grey),
-                      ),
-                      disabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30),
-                        borderSide: const BorderSide(color: Colors.grey),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 30),
-                  InkWell(
-                    onTap: () {
-                      if (selectedSegment != null && compositionController.text.isNotEmpty) {
-                        int? segmentId = selectedSegment?.id;
-                        if (segmentId != null) {
-                          fetchSearchProduct(segmentId, compositionController.text);
-                          Navigator.pop(context);
-                        }
-                      }
-                    },
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        color: CustomColor.themeColor,
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 12.0),
-                        child: Center(
-                          child: TextWrapper(
-                            textShow: CustomString.search,
-                            height: 0,
-                            textColor: CustomColor.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
+                  Container(
+                    padding: const EdgeInsets.all(20),
+                    child: isLoading
+                        ? const Center(child: CircularProgressIndicator())
+                        : Column(
+                      children: [
+                        Row(
+                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            TextWrapper(
+                              textShow: CustomString.filters,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                            InkWell(
+                              onTap: (){
+                                setState(() {
+                                  currentSelectedSegment = null;
+                                  divisionController.clear();
+                                  compositionController.clear();
+                                });
+                                state((){
+                                  currentSelectedSegment = null;
+                                });
+                              },
+                              child: TextWrapper(
+                                textShow: CustomString.clear,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                textColor: CustomColor.themeColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+                        InputDecorator(
+                          decoration: InputDecoration(
+                            labelStyle: GoogleFonts.poppins(color: CustomColor.themeColor, fontSize: 16.0),
+                            errorStyle: GoogleFonts.poppins(color: CustomColor.themeColor, fontSize: 16.0),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30),
+                              borderSide: const BorderSide(color: Colors.grey),
+                            ),
+                          ),
+                          isEmpty: currentSelectedSegment == null,
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton<String>(
+                              dropdownColor: CustomColor.white,
+                              value: currentSelectedSegment,
+                              isDense: true,
+                              hint: Text('Please select Segment', style: GoogleFonts.poppins()),
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  currentSelectedSegment = newValue;
+                                  selectedSegment = segmentsListingResponse.data?.firstWhere(
+                                        (segment) => segment.segmentName == currentSelectedSegment,
+                                  );
+                                  divisionController.text = selectedSegment?.divisionName ?? '';
+                                });
+                                state((){
+                                  currentSelectedSegment = newValue;
+                                });
+                              },
+                              items: (segmentsListingResponse.data ?? []).map((segment) {
+                                return DropdownMenuItem<String>(
+                                  value: segment.segmentName,
+                                  child: Text(segment.segmentName ?? '', style: GoogleFonts.poppins(fontSize: 14)),
+                                );
+                              }).toList(),
+                            ),
                           ),
                         ),
-                      ),
+                        const SizedBox(height: 20),
+                        TextField(
+                          controller: divisionController,
+                          decoration: InputDecoration(
+                            hintText: 'Select a Division',
+                            enabled: false,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30),
+                              borderSide: const BorderSide(color: Colors.grey),
+                            ),
+                            disabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30),
+                              borderSide: const BorderSide(color: Colors.grey),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        TextField(
+                          controller: compositionController,
+                          decoration: InputDecoration(
+                            hintText: 'Select a Composition',
+                            enabled: true,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30),
+                              borderSide: const BorderSide(color: Colors.grey),
+                            ),
+                            disabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30),
+                              borderSide: const BorderSide(color: Colors.grey),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 30),
+                        InkWell(
+                          onTap: () {
+                            if (selectedSegment != null && compositionController.text.isNotEmpty) {
+                              int? segmentId = selectedSegment?.id;
+                              if (segmentId != null) {
+                                fetchSearchProduct(segmentId, compositionController.text);
+                                Navigator.pop(context);
+                              }
+                            }
+                          },
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            decoration: BoxDecoration(
+                              color: CustomColor.themeColor,
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 12.0),
+                              child: Center(
+                                child: TextWrapper(
+                                  textShow: CustomString.search,
+                                  height: 0,
+                                  textColor: CustomColor.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+
+                      ],
                     ),
                   ),
-
                 ],
               ),
-            ),
-          ],
+            );
+          }
         );
       },
-    );
+    ).whenComplete(() {
+      setState(() {
+        currentSelectedSegment = null;
+        divisionController.clear();
+        compositionController.clear();
+      });
+    },);
   }
 
   Future<void> fetchProductListing() async {
@@ -423,6 +449,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
     try {
       String? token = await prefs.getToken();
+      loginResponse = await prefs.getUserInfo();
       ApiRepo(token, null, baseUrl: MyApiUtils.baseUrl).productListing(
         context,
             (error) {
@@ -434,8 +461,8 @@ class _HomeScreenState extends State<HomeScreen> {
         },
             (response) {
           setState(() {
-            productListingResponse = response;
-            filteredList = productListingResponse.data ?? [];
+            productListingResponse = response.data;
+            filteredList = productListingResponse ?? [];
             isLoading = false;
           });
         },
@@ -496,7 +523,10 @@ class _HomeScreenState extends State<HomeScreen> {
             (response) {
           setState(() {
             searchProductResponse = response;
-            filteredList = response.data ?? [];
+            if(searchProductResponse.result == "success" && searchProductResponse.data != null) {
+              productListingResponse = searchProductResponse.data!;
+              filteredList = searchProductResponse.data!;
+            }
             isLoading = false;
           });
         },
@@ -510,7 +540,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void filterSearch(String query) {
-    final allItems = productListingResponse.data ?? [];
+    final allItems = productListingResponse;
     if (query.isEmpty) {
       setState(() {
         filteredList = allItems;

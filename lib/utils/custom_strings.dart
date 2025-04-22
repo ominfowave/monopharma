@@ -27,7 +27,7 @@ class CustomString{
 
 
   //---------------------------------forgot password-----------------------------------------
-  static String forgot = "Forgot";
+  static String forgot = "Forgot Password";
   static String submitButton = "Submit";
 
   // ------------------------------- Registration ---------------------------------------------
