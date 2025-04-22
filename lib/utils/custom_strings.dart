@@ -25,6 +25,11 @@ class CustomString{
   static String errorEmptyUserName = "Please enter username"; // sign up now
   static String errorEmptyPassword = "Please enter password"; // sign up now
 
+
+  //---------------------------------forgot password-----------------------------------------
+  static String forgot = "Forgot";
+  static String submitButton = "Submit";
+
   // ------------------------------- Registration ---------------------------------------------
   static String registration = "Registration";
   static String createNewAccount = "Create New Account";

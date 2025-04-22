@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mono/ui/dashboard/dashboard_screen.dart';
+import 'package:mono/ui/forgot%20password/forgot_password.dart';
 import 'package:mono/utils/colors.dart';
 import 'package:mono/utils/custom_strings.dart';
 import 'package:mono/utils/utils.dart';
@@ -144,13 +145,19 @@ class _LoginScreenState extends State<LoginScreen> {
                       },
                     ),
                     const SizedBox(height: 20),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: TextWrapper(
-                        textShow: CustomString.forgotPassword,
-                        fontSize: 13,
-                        fontWeight: FontWeight.normal,
-                        textColor: CustomColor.userNamePassTextColor,
+                    InkWell(
+                      onTap: (){
+                        Navigator.pushNamed(context, ForgotPassword.routeName);
+                      },
+
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: TextWrapper(
+                          textShow: CustomString.forgotPassword,
+                          fontSize: 13,
+                          fontWeight: FontWeight.normal,
+                          textColor: CustomColor.userNamePassTextColor,
+                        ),
                       ),
                     ),
                     const SizedBox(height: 80),

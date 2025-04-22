@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mono/ui/forgot%20password/forgot_password.dart';
 import 'package:mono/ui/login/login_screen.dart';
 import 'package:mono/ui/productDetail/product_detail.dart';
 import 'package:mono/ui/signup/signup_screen.dart';
@@ -47,7 +48,9 @@ class MyApp extends StatelessWidget {
         // --------------------------- Dashboard Screen -----------------------------------------
         DashboardBaseScreen.routeName: (ctx) => const DashboardBaseScreen(),
         // --------------------------- ProductDetail Screen -----------------------------------------
-        ProductDetail.routeName: (ctx) => const ProductDetail()
+        ProductDetail.routeName: (ctx) => const ProductDetail(),
+        //-----------------------------Forgot password --------------------------------------------
+        ForgotPassword.routeName: (ctx) => const ForgotPassword()
       },
     );
   }
