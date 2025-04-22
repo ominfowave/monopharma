@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../model/divisions/divisions_listing/divisions_listing_response.dart';
+import '../model/forgotpassword/forgot_password_response.dart';
 import '../model/login/login_response.dart';
 
 import '../model/product/generate pdf/generate_product_response.dart';
@@ -246,6 +247,26 @@ class ApiRepo {
       onError("Please check your internet connection and try again.");
     }
   }
+
+//forgot password
+  forgotPassword(
+      BuildContext context,
+      String email,
+      Function(String) onError,
+      Function(dynamic) onSuccess,
+      ) async {
+    if (await Utils.isInternetConnected()) {
+      try {
+        ForgotPasswordResponse forgotPasswordResponse = await apiClient.forgotPassword(email);
+        onSuccess(forgotPasswordResponse);
+      } on DioException catch (e) {
+        Utils.getErrorApi(e, onError, context);
+      }
+    } else {
+      onError("Please check your internet connection and try again.");
+    }
+  }
+
 
 
 

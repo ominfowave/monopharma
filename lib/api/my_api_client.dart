@@ -4,6 +4,7 @@ import 'package:retrofit/error_logger.dart';
 import 'package:retrofit/http.dart';
 
 import '../model/divisions/divisions_listing/divisions_listing_response.dart';
+import '../model/forgotpassword/forgot_password_response.dart';
 import '../model/login/login_response.dart';
 import '../model/product/generate pdf/generate_product_response.dart';
 import '../model/product/product view/product_view_response.dart';
@@ -83,4 +84,9 @@ abstract class MyApiClient {
   @GET("states")
   Future<StateListResponse> state();
 
+
+  //forgot password
+  @POST("forgot-password")
+  Future<ForgotPasswordResponse> forgotPassword(
+      @Query("email") String email);
 }
