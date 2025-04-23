@@ -153,12 +153,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         if (response is ForgotPasswordResponse) {
           Utils.showToast(response.message ?? "Request sent");
           if (response.result == "success") {
-            prefs.setRole(true);
             Navigator.pop(context); // Go back to previous screen
           }
         }
-
-          },
+        },
     );
   }
 

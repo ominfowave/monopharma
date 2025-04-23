@@ -14,7 +14,7 @@ class _MyApiClient implements MyApiClient {
     this.baseUrl,
     this.errorLogger,
   }) {
-    baseUrl ??= 'http://159.65.145.240:8000/api/auth/';
+    baseUrl ??= 'http://app.monopharmacareltd.com/api/auth/';
   }
 
   final Dio _dio;

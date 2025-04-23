@@ -1,6 +1,6 @@
 class MyApiUtils{
 
   //For demo
-  static const String baseUrl = "http://159.65.145.240:8000/api/auth/";
+  static const String baseUrl = "http://app.monopharmacareltd.com/api/auth/";
 
 }

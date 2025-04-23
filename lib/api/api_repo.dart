@@ -248,7 +248,7 @@ class ApiRepo {
     }
   }
 
-//forgot password
+  //forgot password
   forgotPassword(
       BuildContext context,
       String email,
@@ -266,10 +266,4 @@ class ApiRepo {
       onError("Please check your internet connection and try again.");
     }
   }
-
-
-
-
-
-
 }

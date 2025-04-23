@@ -519,19 +519,19 @@ class _SignupScreenState extends State<SignupScreen> {
                             return;
                           }
                           if (confirmPassword.text.isEmpty) {
-                            Utils.showToast('Enter a confirmPassword');
+                            Utils.showToast('Enter a confirm Password');
                             return;
                           }
-                          if (gst.text.isEmpty) {
-                            Utils.showToast('Enter a gstNumber');
+                          if(password.text != confirmPassword.text){
+                            Utils.showToast('Password and Confirm Password must be same');
                             return;
                           }
-                          if (pan.text.isEmpty) {
-                            Utils.showToast('Enter a panNumber');
+                          if (gst.text.isEmpty && pan.text.isEmpty) {
+                            Utils.showToast('Enter a GST No or PAN No');
                             return;
                           }
                           if (drivinglicence.text.isEmpty) {
-                            Utils.showToast('Enter a drivingLicence');
+                            Utils.showToast('Enter a driving Licence');
                             return;
                           }
 
