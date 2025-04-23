@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mono/ui/login/login_screen.dart';
 
+import '../../Api/api_repo.dart';
+import '../../Api/my_api_utils.dart';
+import '../../model/forgotpassword/forgot_password_response.dart';
 import '../../utils/colors.dart';
 import '../../utils/custom_strings.dart';
+import '../../utils/shared_preference.dart';
 import '../../utils/utils.dart';
 import '../../widgets/text_widget.dart';
 
@@ -16,10 +21,11 @@ class ForgotPassword extends StatefulWidget {
 }
 
 class _ForgotPasswordState extends State<ForgotPassword> {
-
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
   bool isLoading = false;
+  ForgotPasswordResponse forgotPasswordResponse = ForgotPasswordResponse();
+  SharedPref prefs = SharedPref();
 
   @override
   Widget build(BuildContext context) {
@@ -76,12 +82,14 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         return null;
                       },
                     ),
-
-
                     const SizedBox(height: 80),
                     GestureDetector(
                       onTap: () {
-
+                        if (emailController.text.isEmpty) {
+                          Utils.showToast('Enter an email');
+                          return;
+                        }
+                        forgot(emailController.text);
 
                       },
                       child: Container(
@@ -94,20 +102,20 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         child: Center(
                           child: isLoading
                               ? const SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(
-                              color: Colors.white,
-                              strokeWidth: 2,
-                            ),
-                          )
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                    strokeWidth: 2,
+                                  ),
+                                )
                               : TextWrapper(
-                            textShow: CustomString.submitButton,
-                            height: 0,
-                            textColor: CustomColor.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                          ),
+                                  textShow: CustomString.submitButton,
+                                  height: 0,
+                                  textColor: CustomColor.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                ),
                         ),
                       ),
                     ),
@@ -115,10 +123,43 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 ),
               ),
             ),
-
           ],
         ),
       ),
     );
   }
+
+  Future<void> forgot(String email) async {
+    setState(() {
+      isLoading = true;
+    });
+
+    await ApiRepo("", null, baseUrl: MyApiUtils.baseUrl).forgotPassword(
+      context,
+      email,
+          (error) {
+        setState(() {
+          isLoading = false;
+        });
+        print('API Error: $error');
+        Utils.showToast("Server Error: $error");
+      },
+          (response) {
+        setState(() {
+          forgotPasswordResponse = response;
+          isLoading = false;
+        });
+
+        if (response is ForgotPasswordResponse) {
+          Utils.showToast(response.message ?? "Request sent");
+          if (response.result == "success") {
+            prefs.setRole(true);
+            Navigator.pop(context); // Go back to previous screen
+          }
+        }
+
+          },
+    );
+  }
+
 }
